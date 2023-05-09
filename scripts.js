@@ -96,6 +96,10 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	Main nav smooth scrolling
 	----------------------------------------- */
+	// const mainMenuNavs = mainNav[0].querySelectorAll('a[href*="#"]');
+	// console.log(mainNav)
+	// console.log(mainMenuNavs);
+
 	(function () {
 		var $mainMenuNavs = $mainNav.find('a[href*="#"]');
 		var $mobileMenuNavs = $mobileNav.find('a[href*="#"]');
@@ -181,24 +185,27 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	 Back to top button
 	 ----------------------------------------- */
-	var $btnTop = $('.btn-to-top');
+	const btnTop = document.querySelector('.btn-to-top');
 
-	if ($btnTop.length > 0) {
-		var scrollTimer;
+	if (btnTop !== null) {
+		btnTop.addEventListener('click', function (e) {
+			e.preventDefault();
 
-		$btnTop.on('click', function (event) {
-			event.preventDefault();
-
-			$('html, body').animate({ scrollTop: 0 }, 'fast');
+			//TODO: fix scrolling speed (.animate 'fast' === 200ms)
+			window.scrollTo({ top: 0, behavior: 'smooth' });
 		});
 
-		$window.on('scroll', function (e) {
+
+		let scrollTimer;
+
+		window.addEventListener('scroll', function (e) {
 			clearTimeout(scrollTimer);
+
 			scrollTimer = setTimeout(function () {
-				if ($window.scrollTop() > 400) {
-					$btnTop.addClass('btn-to-top-visible');
+				if (window.scrollY > 400) {
+					btnTop.classList.add('btn-to-top-visible');
 				} else {
-					$btnTop.removeClass('btn-to-top-visible');
+					btnTop.classList.remove('btn-to-top-visible');
 				}
 			}, 250);
 		});
