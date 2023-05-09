@@ -12,6 +12,7 @@ jQuery(function ($) {
 	const navSubmenus = navWrap ? navWrap.querySelectorAll( 'ul' ) : null;
 	// const navSubmenus = navWrap.querySelectorAll( 'ul' );
 	const mainNav = document.querySelectorAll('.navigation-main');
+	// const mainNav = document.querySelector('.navigation-main');
 	const mobileNav = document.querySelector('.navigation-mobile-wrap');
 	const mobileNavTrigger = document.querySelector('.mobile-nav-trigger');
 	const mobileNavDismiss = document.querySelector('.navigation-mobile-dismiss');
@@ -25,7 +26,6 @@ jQuery(function ($) {
 			mobileNav.querySelector('.navigation-mobile').append(item);
 		});
 	});
-
 
 	mobileNav.querySelectorAll('li').forEach( function (item) {
 		if (item.querySelector('.sub-menu')) {
@@ -96,6 +96,15 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	Main nav smooth scrolling
 	----------------------------------------- */
+	(function () {
+		const mainMenuNavs = mainNav.forEach(function (item) {
+			item.querySelectorAll('a[href*="#"]');
+		});
+
+		// console.log('main', mainMenuNavs);
+		const mobileMenuNavs = mobileNav.querySelectorAll('a[href*="#"]');
+		// console.log('mob', mobileMenuNavs);
+	})();
 	// const mainMenuNavs = mainNav[0].querySelectorAll('a[href*="#"]');
 	// console.log(mainNav)
 	// console.log(mainMenuNavs);
@@ -170,17 +179,17 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	Focus trapping
 	----------------------------------------- */
-	$('[data-set-focus]').each(function () {
-		var $this = $(this);
-		var selector = $this.data('set-focus');
-		var $element = $(selector);
-
-		$this.on('blur', function () {
-			if ($element.length) {
-				$element.focus();
+	document.querySelectorAll('[data-set-focus]').forEach(function (item) {
+		const selector = item.getAttribute('data-set-focus');
+		const element = document.querySelector(selector);
+		
+		item.addEventListener('blur', function () {
+			if (element) {
+				element.focus();
 			}
-		});
+		})
 	});
+
 
 	/* -----------------------------------------
 	 Back to top button
@@ -299,10 +308,11 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	Instagram Widget
 	----------------------------------------- */
-	var $instagramWrap = $('.footer-widget-area');
-	var $instagramWidget = $instagramWrap.find('.zoom-instagram-widget__items');
-
-	if ( $instagramWidget.length ) {
+	// const instagramWrap = document.querySelector('.footer-widget-area');
+	// const instagramWidget = instagramWrap.querySelectorAll('.zoom-instagram-widget__items');
+	// var $instagramWidget = $instagramWrap.find('.zoom-instagram-widget__items');
+	// console.log(instagramWidget);
+	if ( instagramWidget.length ) {
 		var auto  = $instagramWrap.data('auto');
 		var speed = $instagramWrap.data('speed');
 
