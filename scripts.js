@@ -61,34 +61,37 @@ jQuery(function ($) {
 	Menu classes based on available free space
 	----------------------------------------- */
 	function setMenuClasses() {
-		if (! $navWrap.is(':visible')) {
+		if (navWrap.offsetParent === null || navSubmenus === null) {
 			return;
 		}
 
-		var windowWidth = $window.width();
+		let windowWidth = window.innerWidth;
 
-		$navSubmenus.each(function () {
-			var $this = $(this);
-			var $parent = $this.parent();
-			$parent.removeClass('nav-open-left');
-			var leftOffset = $this.offset().left + $this.outerWidth();
+		navSubmenus.forEach(function (el) {
+			const parent = el.parentNode;
+			parent.classList.remove('nav-open-left');
+
+			const rect = el.getBoundingClientRect();
+			const leftOffset = rect.left + window.scrollX + el.offsetWidth;
 
 			if (leftOffset > windowWidth) {
-				$parent.addClass('nav-open-left');
+				parent.classList.add('nav-open-left');
 			}
 		});
 	}
 
 	setMenuClasses();
 
-	var resizeTimer;
+	let resizeTimer;
 
-	$window.on('resize', function () {
+	window.addEventListener('resize', function (e) {
 		clearTimeout(resizeTimer);
+
 		resizeTimer = setTimeout(function () {
 			setMenuClasses();
-		}, 350);
+		}, 350)
 	});
+
 
 	/* -----------------------------------------
 	Main nav smooth scrolling
