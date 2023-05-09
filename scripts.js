@@ -8,68 +8,54 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	 Responsive Menu Init
 	 ----------------------------------------- */
-	var $navWrap = $('.nav');
-	var $navSubmenus = $navWrap.find('ul');
-	var $mainNav = $('.navigation-main');
-	var $mobileNav = $('.navigation-mobile-wrap');
-	var $mobileNavTrigger = $('.mobile-nav-trigger');
-	var $mobileNavDismiss = $('.navigation-mobile-dismiss');
+	const navWrap = document.querySelector('.nav');
+	const navSubmenus = navWrap ? navWrap.querySelectorAll( 'ul' ) : null;
+	// const navSubmenus = navWrap.querySelectorAll( 'ul' );
+	const mainNav = document.querySelectorAll('.navigation-main');
+	const mobileNav = document.querySelector('.navigation-mobile-wrap');
+	const mobileNavTrigger = document.querySelector('.mobile-nav-trigger');
+	const mobileNavDismiss = document.querySelector('.navigation-mobile-dismiss');
 
-	$mainNav.each(function () {
-		var $this = $(this);
-		$this.clone()
-			.find('> li')
-			.removeAttr('id')
-			.appendTo($mobileNav.find('.navigation-mobile'));
-	});
+	mainNav.forEach(function (item) {
+		const itemClass = item.classList.contains('navigation-mobile') ? '.navigation-mobile' : '.navigation-main';
+		const listItems = item.cloneNode(true).querySelectorAll( itemClass + ' > li');
 
-	$mobileNav.find('li')
-		.each(function () {
-			var $this = $(this);
-			$this.removeAttr('id');
-
-			if ($this.find('.sub-menu').length > 0) {
-				var $button = $('<button class="menu-item-sub-menu-toggle"><span class="sr-only">' + ignition_front_vars.expand_submenu + '</span></button>');
-
-				$this.find('> a').after($button);
-			}
+		listItems.forEach(function (item) {
+			item.removeAttribute('id');
+			mobileNav.querySelector('.navigation-mobile').append(item);
 		});
-
-	$mobileNav.find('.menu-item-sub-menu-toggle').on('click', function (event) {
-		event.preventDefault();
-		var $this = $(this);
-		$this.parent().toggleClass('menu-item-expanded');
 	});
 
-	$mobileNav.find('li > a').on('click', function (event) {
-		var $this = $(this);
-		var href = $this.attr('href');
 
-		if (href === '#' || !href) {
-			event.preventDefault();
-			$this.parent().toggleClass('menu-item-expanded');
+	mobileNav.querySelectorAll('li').forEach( function (item) {
+		if (item.querySelector('.sub-menu')) {
+			const btn = document.createElement('button');
+			btn.classList.add('menu-item-sub-menu-toggle');
+			item.appendChild(btn);
 		}
 	});
 
-	$mobileNavTrigger.on('click', function (event) {
-		event.preventDefault();
-		mobileNavTrigger();
+	const mobileToggle = mobileNav.querySelectorAll('.menu-item-sub-menu-toggle');
+
+	mobileToggle.forEach(function (item) {
+		item.addEventListener('click', function (event) {
+			event.preventDefault();
+			item.parentNode.classList.toggle('menu-item-expanded');
+		})
 	});
 
-	$mobileNavDismiss.on('click', function (event) {
+	mobileNavTrigger.addEventListener('click', function(event) {
 		event.preventDefault();
-		mobileNavDismiss();
+		body.classList.add('mobile-nav-open');
+		mobileNavDismiss.focus();
 	});
 
-	function mobileNavDismiss() {
-		$body.removeClass('mobile-nav-open');
-		$mobileNavTrigger.focus();
-	}
+	mobileNavDismiss.addEventListener('click', function(event) {
+		event.preventDefault();
+		body.classList.remove('mobile-nav-open');
+		mobileNavTrigger.focus();
+	});
 
-	function mobileNavTrigger() {
-		$body.addClass('mobile-nav-open');
-		$mobileNavDismiss.focus();
-	}
 
 	/* -----------------------------------------
 	Menu classes based on available free space
