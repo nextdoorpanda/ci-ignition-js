@@ -1,9 +1,9 @@
 jQuery(function ($) {
 	'use strict';
 
-	var $window = $(window);
-	var $body = $('body');
-	var isRTL = $body.hasClass('rtl');
+	// const windowObj = window;
+	const body = document.body;
+	const isRTL = body.classList.contains('rtl');
 
 	/* -----------------------------------------
 	 Responsive Menu Init
