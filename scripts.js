@@ -96,85 +96,85 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	Main nav smooth scrolling
 	----------------------------------------- */
-	(function () {
-		const mainMenuNavs = mainNav.forEach(function (item) {
-			item.querySelectorAll('a[href*="#"]');
-		});
-
-		// console.log('main', mainMenuNavs);
-		const mobileMenuNavs = mobileNav.querySelectorAll('a[href*="#"]');
-		// console.log('mob', mobileMenuNavs);
-	})();
-	// const mainMenuNavs = mainNav[0].querySelectorAll('a[href*="#"]');
-	// console.log(mainNav)
-	// console.log(mainMenuNavs);
-
-	(function () {
-		var $mainMenuNavs = $mainNav.find('a[href*="#"]');
-		var $mobileMenuNavs = $mobileNav.find('a[href*="#"]');
-		var $navs = $mainMenuNavs.add($mobileMenuNavs).filter(function () {
-			var href = $(this).attr('href');
-			return href !== '#' &&
-				href !== 'http://#' &&
-				href !== 'https://#' &&
-				href !== '#mobilemenu' &&
-				href !== '#nav-dismiss'
-		});
-
-		if (!$navs.length || !$mainNav.hasClass('nav-smooth-scroll')) {
-			return;
-		}
-
-		var offset = 85;
-
-		$navs.on('click', function (event) {
-			// Check if the element exists on page before continuing
-			var $target = $(this.hash);
-
-			if ($target.length === 0) {
-				return;
-			}
-
-			event.preventDefault();
-
-			if ($target.length && ! $target.hasClass('elementor-menu-anchor')) {
-				mobileNavDismiss();
-
-				$('html, body').animate({
-					scrollTop: $target.offset().top - offset,
-				}, 500);
-			}
-		});
-
-		// Mark nav items active on scroll
-		var scrollTimer;
-
-		$window.on('scroll', (function () {
-			clearTimeout(scrollTimer);
-
-			scrollTimer = setTimeout(function () {
-				// Assign active class to nav links while scolling
-				$navs.each(function () {
-					var $this = $(this);
-					var hash = $this.prop('hash');
-					var section = $(hash).get(0);
-
-					if (!section) {
-						return;
-					}
-
-					var sectionTop = section.getBoundingClientRect().top;
-
-					if (sectionTop > 0 && sectionTop < window.innerHeight / 2) {
-						$this.parent().addClass('current-scroll-menu-item current-menu-item');
-					} else {
-						$this.trigger('blur');
-						$this.parent().removeClass('current-scroll-menu-item current-menu-item current_page_item');
-					}
-				});
-			}, 150);
-		})).scroll();
-	}());
+	// (function () {
+	// 	const mainMenuNavs = mainNav.forEach(function (item) {
+	// 		item.querySelectorAll('a[href*="#"]');
+	// 	});
+	//
+	// 	// console.log('main', mainMenuNavs);
+	// 	const mobileMenuNavs = mobileNav.querySelectorAll('a[href*="#"]');
+	// 	// console.log('mob', mobileMenuNavs);
+	// })();
+	// // const mainMenuNavs = mainNav[0].querySelectorAll('a[href*="#"]');
+	// // console.log(mainNav)
+	// // console.log(mainMenuNavs);
+	//
+	// (function () {
+	// 	var $mainMenuNavs = $mainNav.find('a[href*="#"]');
+	// 	var $mobileMenuNavs = $mobileNav.find('a[href*="#"]');
+	// 	var $navs = $mainMenuNavs.add($mobileMenuNavs).filter(function () {
+	// 		var href = $(this).attr('href');
+	// 		return href !== '#' &&
+	// 			href !== 'http://#' &&
+	// 			href !== 'https://#' &&
+	// 			href !== '#mobilemenu' &&
+	// 			href !== '#nav-dismiss'
+	// 	});
+	//
+	// 	if (!$navs.length || !$mainNav.hasClass('nav-smooth-scroll')) {
+	// 		return;
+	// 	}
+	//
+	// 	var offset = 85;
+	//
+	// 	$navs.on('click', function (event) {
+	// 		// Check if the element exists on page before continuing
+	// 		var $target = $(this.hash);
+	//
+	// 		if ($target.length === 0) {
+	// 			return;
+	// 		}
+	//
+	// 		event.preventDefault();
+	//
+	// 		if ($target.length && ! $target.hasClass('elementor-menu-anchor')) {
+	// 			mobileNavDismiss();
+	//
+	// 			$('html, body').animate({
+	// 				scrollTop: $target.offset().top - offset,
+	// 			}, 500);
+	// 		}
+	// 	});
+	//
+	// 	// Mark nav items active on scroll
+	// 	var scrollTimer;
+	//
+	// 	$window.on('scroll', (function () {
+	// 		clearTimeout(scrollTimer);
+	//
+	// 		scrollTimer = setTimeout(function () {
+	// 			// Assign active class to nav links while scolling
+	// 			$navs.each(function () {
+	// 				var $this = $(this);
+	// 				var hash = $this.prop('hash');
+	// 				var section = $(hash).get(0);
+	//
+	// 				if (!section) {
+	// 					return;
+	// 				}
+	//
+	// 				var sectionTop = section.getBoundingClientRect().top;
+	//
+	// 				if (sectionTop > 0 && sectionTop < window.innerHeight / 2) {
+	// 					$this.parent().addClass('current-scroll-menu-item current-menu-item');
+	// 				} else {
+	// 					$this.trigger('blur');
+	// 					$this.parent().removeClass('current-scroll-menu-item current-menu-item current_page_item');
+	// 				}
+	// 			});
+	// 		}, 150);
+	// 	})).scroll();
+	// }());
 
 	/* -----------------------------------------
 	Focus trapping
@@ -223,17 +223,17 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	 Header Search Toggle
 	 ----------------------------------------- */
-	var $searchTrigger = $('.global-search-form-trigger');
-	var $searchDismiss = $('.global-search-form-dismiss');
-	var $headSearchForm = $('.global-search-form');
+	const searchTrigger = document.querySelector('.global-search-form-trigger');
+	const searchDismiss = document.querySelector('.global-search-form-dismiss');
+	const headSearchForm = document.querySelector('.global-search-form');
 
 	function dismissHeadSearch(e) {
 		if (e) {
 			e.preventDefault();
 		}
 
-		$headSearchForm.removeClass('global-search-form-expanded');
-		$body.focus();
+		headSearchForm.classList.remove('global-search-form-expanded');
+		body.focus();
 	}
 
 	function displayHeadSearch(e) {
@@ -241,37 +241,38 @@ jQuery(function ($) {
 			e.preventDefault();
 		}
 
-		$headSearchForm
-			.addClass('global-search-form-expanded')
-			.find('input')
-			.focus();
+		headSearchForm.classList.add('global-search-form-expanded');
+		headSearchForm.querySelector('input').focus();
 	}
 
 	function isHeadSearchVisible() {
-		return $headSearchForm.hasClass('global-search-form-expanded');
+		return headSearchForm.classList.contains('global-search-form-expanded');
 	}
 
-	$searchTrigger.on('click', displayHeadSearch);
-	$searchDismiss.on('click', dismissHeadSearch);
+	searchTrigger.addEventListener('click', displayHeadSearch);
+	searchDismiss.addEventListener('click', dismissHeadSearch);
 
 	/* Event propagations */
-	$(document).on('keydown', function (e) {
+	document.addEventListener('keydown',function (e) {
 		e = e || window.e;
 		if (e.keyCode === 27 && isHeadSearchVisible()) {
 			dismissHeadSearch(e);
 		}
 	});
 
-	$body
-		.on('click', function (e) {
-			if (isHeadSearchVisible()) {
-				dismissHeadSearch();
-			}
-		})
-		.find('.global-search-form, .global-search-form-trigger')
-		.on('click', function (e) {
-			e.stopPropagation();
+	body.addEventListener('click', function (e) {
+		if (isHeadSearchVisible()) {
+			dismissHeadSearch();
+		}
+
+		const searchFormElements = document.querySelectorAll('.global-search-form, .global-search-form-trigger');
+		
+		searchFormElements.forEach(function (elem) {
+			elem.addEventListener('click', function (e) {
+				e.stopPropagation();
+			})
 		});
+	});
 
 	/* -----------------------------------------
 	 Category Filters
