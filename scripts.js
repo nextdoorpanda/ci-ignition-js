@@ -65,7 +65,7 @@ jQuery(function ($) {
 			return;
 		}
 
-		let windowWidth = window.innerWidth;
+		const windowWidth = window.innerWidth;
 
 		navSubmenus.forEach(function (el) {
 			const parent = el.parentNode;
@@ -280,10 +280,10 @@ jQuery(function ($) {
 	 Category Filters
 	 ----------------------------------------- */
 	const filtersWrap = document.querySelectorAll( '.ci-item-filters' );
-	console.log(filtersWrap)
-	$filtersWrap.forEach( function (item) {
-		var $wrap = $( this );
-		var $filters = $wrap.find( '.ci-item-filter' );
+
+	filtersWrap.forEach( function (item) {
+		const filters = item.querySelectorAll('.ci-item-filter');
+		// const row =
 		var $row = $wrap.next( '.row-items' );
 		var $allItems = $row.find( '[class*="col"]' );
 
