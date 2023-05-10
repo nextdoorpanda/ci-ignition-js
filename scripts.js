@@ -283,29 +283,36 @@ jQuery(function ($) {
 
 	filtersWrap.forEach( function (item) {
 		const filters = item.querySelectorAll('.ci-item-filter');
-		// const row =
-		var $row = $wrap.next( '.row-items' );
-		var $allItems = $row.find( '[class*="col"]' );
+		const row = item.parentNode.querySelector('.row-items');
+		const allItems = row.querySelectorAll('[class*="col"]');
 
-		$filters.on( 'click', function ( event ) {
-			event.preventDefault();
-			var $this = $( this );
+		function removeActiveClass() {
+			filters.forEach(function (el) {
+				el.classList.remove('filter-active');
+			});
+		}
 
-			$filters.removeClass( 'filter-active' );
-			$this.addClass( 'filter-active' );
+		filters.forEach(function (el) {
+			el.addEventListener('click', function (e) {
+				e.preventDefault();
+				removeActiveClass();
+				el.classList.add('filter-active');
 
-			var classes = $this.data( 'filter' );
-			var $items = $row.find( classes );
+				const classes = el.getAttribute('data-filter');
+				const items = row.querySelector(classes);
 
-			if ( classes === '*' ) {
-				$allItems.fadeIn( 500 );
-				return;
-			}
+				if(classes === '*') {
+					allItems.forEach(function (item) {
+						item.style.transition = 'opacity 500ms';
+						item.style.opacity = 1;
+					});
+				}
 
-			$allItems.not( $items ).fadeOut( 200 ).promise().done( function () {
-				$items.fadeIn( 200 );
-			} );
-		} );
+				// $allItems.not( $items ).fadeOut( 200 ).promise().done( function () {
+				// 	$items.fadeIn( 200 );
+				// } );
+			});
+		});
 	} );
 
 	/* -----------------------------------------
