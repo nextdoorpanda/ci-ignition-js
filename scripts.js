@@ -249,8 +249,10 @@ jQuery(function ($) {
 		return headSearchForm.classList.contains('global-search-form-expanded');
 	}
 
-	searchTrigger.addEventListener('click', displayHeadSearch);
-	searchDismiss.addEventListener('click', dismissHeadSearch);
+	if (searchTrigger) {
+		searchTrigger.addEventListener('click', displayHeadSearch);
+		searchDismiss.addEventListener('click', dismissHeadSearch);
+	}
 
 	/* Event propagations */
 	document.addEventListener('keydown',function (e) {
@@ -277,9 +279,9 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	 Category Filters
 	 ----------------------------------------- */
-	var $filtersWrap = $( '.ci-item-filters' );
-
-	$filtersWrap.each( function () {
+	const filtersWrap = document.querySelectorAll( '.ci-item-filters' );
+	console.log(filtersWrap)
+	$filtersWrap.forEach( function (item) {
 		var $wrap = $( this );
 		var $filters = $wrap.find( '.ci-item-filter' );
 		var $row = $wrap.next( '.row-items' );
