@@ -84,7 +84,7 @@
 
     let resizeTimer;
 
-    window.addEventListener('resize', function (e) {
+    window.addEventListener('resize', function () {
         clearTimeout(resizeTimer);
 
         resizeTimer = setTimeout(function () {
