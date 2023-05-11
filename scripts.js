@@ -299,18 +299,44 @@ jQuery(function ($) {
 				el.classList.add('filter-active');
 
 				const classes = el.getAttribute('data-filter');
-				const items = row.querySelector(classes);
+				const items = row.querySelectorAll(classes);
+
+				//TODO: Refactor following code (too much repetition)
 
 				if(classes === '*') {
 					allItems.forEach(function (item) {
 						item.style.transition = 'opacity 500ms';
-						item.style.opacity = 1;
+						item.style.opacity = 0;
+
+						setTimeout(function () {
+							item.style.opacity = 1;
+							item.style.display = 'block';
+						}, 200);
+
 					});
+					return;
 				}
 
-				// $allItems.not( $items ).fadeOut( 200 ).promise().done( function () {
-				// 	$items.fadeIn( 200 );
-				// } );
+				Array.from(allItems).forEach(item => {
+					if (!Array.from(items).includes(item)) {
+						item.style.transition = 'opacity 500ms';
+						item.style.opacity = 0;
+					}
+
+					setTimeout(function() {
+						Array.from(allItems).forEach(function (item) {
+							item.style.transition = 'opacity 500ms';
+							if (!Array.from(items).includes(item)) {
+								item.style.display = 'none';
+								item.style.opacity = 0;
+							} else {
+								item.style.display = 'block';
+								item.style.opacity = 1;
+							}
+						});
+					}, 200);
+				});
+
 			});
 		});
 	} );
