@@ -1,4 +1,4 @@
-jQuery(function ($) {
+(function () {
 	'use strict';
 
 	// const windowObj = window;
@@ -9,7 +9,7 @@ jQuery(function ($) {
 	 Responsive Menu Init
 	 ----------------------------------------- */
 	const navWrap = document.querySelector('.nav');
-	const navSubmenus = navWrap ? navWrap.querySelectorAll( 'ul' ) : null;
+	const navSubmenus = navWrap ? navWrap.querySelectorAll('ul') : null;
 	// const navSubmenus = navWrap.querySelectorAll( 'ul' );
 	const mainNav = document.querySelectorAll('.navigation-main');
 	// const mainNav = document.querySelector('.navigation-main');
@@ -19,7 +19,7 @@ jQuery(function ($) {
 
 	mainNav.forEach(function (item) {
 		const itemClass = item.classList.contains('navigation-mobile') ? '.navigation-mobile' : '.navigation-main';
-		const listItems = item.cloneNode(true).querySelectorAll( itemClass + ' > li');
+		const listItems = item.cloneNode(true).querySelectorAll(itemClass + ' > li');
 
 		listItems.forEach(function (item) {
 			item.removeAttribute('id');
@@ -27,7 +27,7 @@ jQuery(function ($) {
 		});
 	});
 
-	mobileNav.querySelectorAll('li').forEach( function (item) {
+	mobileNav.querySelectorAll('li').forEach(function (item) {
 		if (item.querySelector('.sub-menu')) {
 			const btn = document.createElement('button');
 			btn.classList.add('menu-item-sub-menu-toggle');
@@ -44,13 +44,13 @@ jQuery(function ($) {
 		})
 	});
 
-	mobileNavTrigger.addEventListener('click', function(event) {
+	mobileNavTrigger.addEventListener('click', function (event) {
 		event.preventDefault();
 		body.classList.add('mobile-nav-open');
 		mobileNavDismiss.focus();
 	});
 
-	mobileNavDismiss.addEventListener('click', function(event) {
+	mobileNavDismiss.addEventListener('click', function (event) {
 		event.preventDefault();
 		body.classList.remove('mobile-nav-open');
 		mobileNavTrigger.focus();
@@ -182,7 +182,7 @@ jQuery(function ($) {
 	document.querySelectorAll('[data-set-focus]').forEach(function (item) {
 		const selector = item.getAttribute('data-set-focus');
 		const element = document.querySelector(selector);
-		
+
 		item.addEventListener('blur', function () {
 			if (element) {
 				element.focus();
@@ -201,7 +201,7 @@ jQuery(function ($) {
 			e.preventDefault();
 
 			//TODO: fix scrolling speed (.animate 'fast' === 200ms)
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			window.scrollTo({top: 0, behavior: 'smooth'});
 		});
 
 
@@ -255,7 +255,7 @@ jQuery(function ($) {
 	}
 
 	/* Event propagations */
-	document.addEventListener('keydown',function (e) {
+	document.addEventListener('keydown', function (e) {
 		e = e || window.e;
 		if (e.keyCode === 27 && isHeadSearchVisible()) {
 			dismissHeadSearch(e);
@@ -268,7 +268,7 @@ jQuery(function ($) {
 		}
 
 		const searchFormElements = document.querySelectorAll('.global-search-form, .global-search-form-trigger');
-		
+
 		searchFormElements.forEach(function (elem) {
 			elem.addEventListener('click', function (e) {
 				e.stopPropagation();
@@ -279,9 +279,9 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	 Category Filters
 	 ----------------------------------------- */
-	const filtersWrap = document.querySelectorAll( '.ci-item-filters' );
+	const filtersWrap = document.querySelectorAll('.ci-item-filters');
 
-	filtersWrap.forEach( function (item) {
+	filtersWrap.forEach(function (item) {
 		const filters = item.querySelectorAll('.ci-item-filter');
 		const row = item.parentNode.querySelector('.row-items');
 		const allItems = row.querySelectorAll('[class*="col"]');
@@ -303,7 +303,7 @@ jQuery(function ($) {
 
 				//TODO: Refactor following code (too much repetition)
 
-				if(classes === '*') {
+				if (classes === '*') {
 					allItems.forEach(function (item) {
 						item.style.transition = 'opacity 500ms';
 						item.style.opacity = 0;
@@ -323,7 +323,7 @@ jQuery(function ($) {
 						item.style.opacity = 0;
 					}
 
-					setTimeout(function() {
+					setTimeout(function () {
 						Array.from(allItems).forEach(function (item) {
 							item.style.transition = 'opacity 500ms';
 							if (!Array.from(items).includes(item)) {
@@ -339,7 +339,11 @@ jQuery(function ($) {
 
 			});
 		});
-	} );
+	});
+})();
+
+jQuery(function ($) {
+	'use strict';
 
 	/* -----------------------------------------
 	Instagram Widget
