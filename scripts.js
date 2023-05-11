@@ -344,11 +344,10 @@ jQuery(function ($) {
 	/* -----------------------------------------
 	Instagram Widget
 	----------------------------------------- */
-	// const instagramWrap = document.querySelector('.footer-widget-area');
-	// const instagramWidget = instagramWrap.querySelectorAll('.zoom-instagram-widget__items');
-	// var $instagramWidget = $instagramWrap.find('.zoom-instagram-widget__items');
-	// console.log(instagramWidget);
-	if ( instagramWidget.length ) {
+	var $instagramWrap = $('.footer-widget-area');
+	var $instagramWidget = $instagramWrap.find('.zoom-instagram-widget__items');
+
+	if ( $instagramWidget.length ) {
 		var auto  = $instagramWrap.data('auto');
 		var speed = $instagramWrap.data('speed');
 
