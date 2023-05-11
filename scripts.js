@@ -368,34 +368,6 @@ jQuery(function ($) {
 			]
 		});
 	}
-
-	$body.on( 'click', '.entry-share-copy-url', function( event ) {
-		event.preventDefault();
-
-		copyToClipboard( $( this ).attr( 'href' ) );
-
-		// TODO vmasto: Add some visual indicator that the text was copied?
-	} );
-
-	function copyToClipboard( text ) {
-		if ( navigator.clipboard && window.isSecureContext ) {
-			// Navigator clipboard api needs https or localhost.
-			navigator.clipboard.writeText( text );
-		} else {
-			// Hidden text area method.
-			var textarea            = document.createElement( 'textarea' );
-			textarea.value          = text;
-			textarea.style.position = 'fixed';
-			textarea.style.left     = '-999999px';
-			textarea.style.top      = '-999999px';
-			document.body.appendChild( text );
-			textarea.focus();
-			textarea.select();
-			document.execCommand( 'copy' );
-			textarea.remove();
-		}
-	}
-
 });
 
 /**
