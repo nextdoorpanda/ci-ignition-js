@@ -95,42 +95,33 @@
 	Main nav smooth scrolling
 	----------------------------------------- */
 	(function () {
-		const mainMenuNavs = [];
+		let mainMenuNavs;
 		let mainNavContainsSmoothScroll;
 
 		mainNav.forEach(function (item) {
-			const listItems = item.cloneNode(true).querySelectorAll('a[href*="#"]');
-			mainMenuNavs.push(...listItems);
+			mainMenuNavs = item.querySelectorAll('a[href*="#"]');
 
 			if (item.classList.contains('nav-smooth-scroll')){
 				mainNavContainsSmoothScroll = true;
 			}
 		});
 
-		const mobileMenuNavs = [...mobileNav.querySelectorAll('a[href*="#"]')];
+		const mobileMenuNavs = mobileNav.querySelectorAll('a[href*="#"]');
 
-		const filteredMobileLinks = mobileMenuNavs.filter(function (item) {
+		const filteredMobileLinks = Array.from(mobileMenuNavs).filter(function (item) {
 			const rejectedHrefs = ['#', 'http://#', 'https://#', '#mobilemenu', '#nav-dismiss'];
 			return !rejectedHrefs.includes(item.getAttribute('href'))
 		});
 
 		const navs = [...mainMenuNavs, ...filteredMobileLinks];
-		// const navs = Array.from([...mainMenuNavs, ...filteredMobileLinks]);
 
-		// console.log(filteredMobileLinks)
-		// console.log('main', mainNav);
-		// console.log('main', mainMenuNavs);
-		// console.log('mob', mobileMenuNavs);
-		// console.log('navs', navs);
-
-		if (!navs.length || !mainNavContainsSmoothScroll) {
-			return;
-		}
-
-		const offset = 85;
-
+		// if (!navs.length || !mainNavContainsSmoothScroll) {
+		// 	return;
+		// }
+		//
+		// const offset = 85;
+		//
 		navs.forEach(function (el) {
-			// console.log(el)
 			el.addEventListener('click', function (e) {
 				e.preventDefault();
 				console.log('works')
@@ -233,9 +224,14 @@
 	/* -----------------------------------------
 	 Header Search Toggle
 	 ----------------------------------------- */
-	const headSearchForm = document.querySelector('.global-search-form');
+	(function () {
+		const headSearchForm = document.querySelector('.global-search-form');
 
-	if(headSearchForm) {
+		if(!headSearchForm) {
+			console.log('not found search')
+			return;
+		}
+
 		const searchTrigger = document.querySelector('.global-search-form-trigger');
 		const searchDismiss = document.querySelector('.global-search-form-dismiss');
 
@@ -287,7 +283,7 @@
 				})
 			});
 		});
-	}
+	}());
 
 
 	/* -----------------------------------------
