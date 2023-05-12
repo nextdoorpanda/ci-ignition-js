@@ -1,9 +1,7 @@
 (function () {
 	'use strict';
 
-	// const windowObj = window;
 	const body = document.body;
-	const isRTL = body.classList.contains('rtl');
 
 	/* -----------------------------------------
 	 Responsive Menu Init
@@ -344,6 +342,9 @@
 
 jQuery(function ($) {
 	'use strict';
+
+	var $body = $('body');
+	var isRTL = $body.hasClass('rtl');
 
 	/* -----------------------------------------
 	Instagram Widget
