@@ -154,35 +154,33 @@
 		});
 
 
+		// Mark nav items active on scroll
+		let scrollTimer;
 
-	// 	// Mark nav items active on scroll
-	// 	var scrollTimer;
-	//
-	// 	$window.on('scroll', (function () {
-	// 		clearTimeout(scrollTimer);
-	//
-	// 		scrollTimer = setTimeout(function () {
-	// 			// Assign active class to nav links while scolling
-	// 			$navs.each(function () {
-	// 				var $this = $(this);
-	// 				var hash = $this.prop('hash');
-	// 				var section = $(hash).get(0);
-	//
-	// 				if (!section) {
-	// 					return;
-	// 				}
-	//
-	// 				var sectionTop = section.getBoundingClientRect().top;
-	//
-	// 				if (sectionTop > 0 && sectionTop < window.innerHeight / 2) {
-	// 					$this.parent().addClass('current-scroll-menu-item current-menu-item');
-	// 				} else {
-	// 					$this.trigger('blur');
-	// 					$this.parent().removeClass('current-scroll-menu-item current-menu-item current_page_item');
-	// 				}
-	// 			});
-	// 		}, 150);
-	// 	})).scroll();
+		window.addEventListener('scroll', function () {
+			clearTimeout(scrollTimer);
+
+			scrollTimer = setTimeout(function () {
+				// Assign active class to nav links while scrolling
+				navs.forEach(function (el) {
+					const section = document.querySelector(el.hash);
+
+					if (!section) {
+						return;
+					}
+
+					const sectionTop = section.getBoundingClientRect().top;
+
+					if (sectionTop > 0 && sectionTop < window.innerHeight / 2) {
+						section.parentNode.classList.add('current-scroll-menu-item', 'current-menu-item');
+					} else {
+						section.dispatchEvent(new Event('blur'));
+						section.parentNode.classList.remove('current-scroll-menu-item', 'current-menu-item', 'current_page_item');
+					}
+
+				});
+			}, 150);
+		});
 	}());
 
 	/* -----------------------------------------
@@ -236,7 +234,6 @@
 		const headSearchForm = document.querySelector('.global-search-form');
 
 		if(!headSearchForm) {
-			console.log('not found search')
 			return;
 		}
 
