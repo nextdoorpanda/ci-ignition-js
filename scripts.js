@@ -82,7 +82,7 @@
 
 	let resizeTimer;
 
-	window.addEventListener('resize', function (e) {
+	window.addEventListener('resize', function () {
 		clearTimeout(resizeTimer);
 
 		resizeTimer = setTimeout(function () {
@@ -205,7 +205,7 @@
 
 		let scrollTimer;
 
-		window.addEventListener('scroll', function (e) {
+		window.addEventListener('scroll', function () {
 			clearTimeout(scrollTimer);
 
 			scrollTimer = setTimeout(function () {
@@ -260,7 +260,7 @@
 		}
 	});
 
-	body.addEventListener('click', function (e) {
+	body.addEventListener('click', function () {
 		if (isHeadSearchVisible()) {
 			dismissHeadSearch();
 		}
