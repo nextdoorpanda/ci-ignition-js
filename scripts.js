@@ -12,8 +12,8 @@
 	const mainNav = document.querySelectorAll('.navigation-main');
 	// const mainNav = document.querySelector('.navigation-main');
 	const mobileNav = document.querySelector('.navigation-mobile-wrap');
-	const mobileNavTrigger = document.querySelector('.mobile-nav-trigger');
-	const mobileNavDismiss = document.querySelector('.navigation-mobile-dismiss');
+	const mobileNavTriggerElement = document.querySelector('.mobile-nav-trigger');
+	const mobileNavDismissElement = document.querySelector('.navigation-mobile-dismiss');
 
 	mainNav.forEach(function (item) {
 		const itemClass = item.classList.contains('navigation-mobile') ? '.navigation-mobile' : '.navigation-main';
@@ -42,17 +42,25 @@
 		})
 	});
 
-	mobileNavTrigger.addEventListener('click', function (event) {
+	mobileNavTriggerElement.addEventListener('click', function (event) {
 		event.preventDefault();
-		body.classList.add('mobile-nav-open');
-		mobileNavDismiss.focus();
+		mobileNavTrigger();
 	});
 
-	mobileNavDismiss.addEventListener('click', function (event) {
+	mobileNavDismissElement.addEventListener('click', function (event) {
 		event.preventDefault();
-		body.classList.remove('mobile-nav-open');
-		mobileNavTrigger.focus();
+		mobileNavDismiss();
 	});
+
+	function mobileNavDismiss() {
+		body.classList.remove('mobile-nav-open');
+		mobileNavTriggerElement.focus();
+	}
+
+	function mobileNavTrigger() {
+		body.classList.add('mobile-nav-open');
+		mobileNavDismissElement.focus();
+	}
 
 
 	/* -----------------------------------------
@@ -115,38 +123,38 @@
 
 		const navs = [...mainMenuNavs, ...filteredMobileLinks];
 
-		// if (!navs.length || !mainNavContainsSmoothScroll) {
-		// 	return;
-		// }
-		//
-		// const offset = 85;
-		//
+		if (!navs.length || !mainNavContainsSmoothScroll) {
+			return;
+		}
+
+		const offset = 85;
+
 		navs.forEach(function (el) {
 			el.addEventListener('click', function (e) {
-				e.preventDefault();
-				console.log('works')
-			})
-		})
+				// Check if the element exists on page before continuing
+				const target = document.querySelector(el.hash);
 
-	// 	$navs.on('click', function (event) {
-	// 		// Check if the element exists on page before continuing
-	// 		var $target = $(this.hash);
-	//
-	// 		if ($target.length === 0) {
-	// 			return;
-	// 		}
-	//
-	// 		event.preventDefault();
-	//
-	// 		if ($target.length && ! $target.hasClass('elementor-menu-anchor')) {
-	// 			mobileNavDismiss();
-	//
-	// 			$('html, body').animate({
-	// 				scrollTop: $target.offset().top - offset,
-	// 			}, 500);
-	// 		}
-	// 	});
-	//
+				if (!target) {
+					return;
+				}
+
+				e.preventDefault();
+
+				if (target && !target.classList.contains('elementor-menu-anchor')) {
+					mobileNavDismiss();
+
+					const targetPosition = target.getBoundingClientRect();
+
+					window.scrollTo({
+						top: targetPosition.top - offset,
+						behavior: 'smooth',
+					});
+				}
+			});
+		});
+
+
+
 	// 	// Mark nav items active on scroll
 	// 	var scrollTimer;
 	//
