@@ -94,37 +94,49 @@
 	/* -----------------------------------------
 	Main nav smooth scrolling
 	----------------------------------------- */
-	// (function () {
-	// 	const mainMenuNavs = mainNav.forEach(function (item) {
-	// 		item.querySelectorAll('a[href*="#"]');
-	// 	});
-	//
-	// 	// console.log('main', mainMenuNavs);
-	// 	const mobileMenuNavs = mobileNav.querySelectorAll('a[href*="#"]');
-	// 	// console.log('mob', mobileMenuNavs);
-	// })();
-	// // const mainMenuNavs = mainNav[0].querySelectorAll('a[href*="#"]');
-	// // console.log(mainNav)
-	// // console.log(mainMenuNavs);
-	//
-	// (function () {
-	// 	var $mainMenuNavs = $mainNav.find('a[href*="#"]');
-	// 	var $mobileMenuNavs = $mobileNav.find('a[href*="#"]');
-	// 	var $navs = $mainMenuNavs.add($mobileMenuNavs).filter(function () {
-	// 		var href = $(this).attr('href');
-	// 		return href !== '#' &&
-	// 			href !== 'http://#' &&
-	// 			href !== 'https://#' &&
-	// 			href !== '#mobilemenu' &&
-	// 			href !== '#nav-dismiss'
-	// 	});
-	//
-	// 	if (!$navs.length || !$mainNav.hasClass('nav-smooth-scroll')) {
-	// 		return;
-	// 	}
-	//
-	// 	var offset = 85;
-	//
+	(function () {
+		const mainMenuNavs = [];
+		let mainNavContainsSmoothScroll;
+
+		mainNav.forEach(function (item) {
+			const listItems = item.cloneNode(true).querySelectorAll('a[href*="#"]');
+			mainMenuNavs.push(...listItems);
+
+			if (item.classList.contains('nav-smooth-scroll')){
+				mainNavContainsSmoothScroll = true;
+			}
+		});
+
+		const mobileMenuNavs = [...mobileNav.querySelectorAll('a[href*="#"]')];
+
+		const filteredMobileLinks = mobileMenuNavs.filter(function (item) {
+			const rejectedHrefs = ['#', 'http://#', 'https://#', '#mobilemenu', '#nav-dismiss'];
+			return !rejectedHrefs.includes(item.getAttribute('href'))
+		});
+
+		const navs = [...mainMenuNavs, ...filteredMobileLinks];
+		// const navs = Array.from([...mainMenuNavs, ...filteredMobileLinks]);
+
+		// console.log(filteredMobileLinks)
+		// console.log('main', mainNav);
+		// console.log('main', mainMenuNavs);
+		// console.log('mob', mobileMenuNavs);
+		// console.log('navs', navs);
+
+		if (!navs.length || !mainNavContainsSmoothScroll) {
+			return;
+		}
+
+		const offset = 85;
+
+		navs.forEach(function (el) {
+			// console.log(el)
+			el.addEventListener('click', function (e) {
+				e.preventDefault();
+				console.log('works')
+			})
+		})
+
 	// 	$navs.on('click', function (event) {
 	// 		// Check if the element exists on page before continuing
 	// 		var $target = $(this.hash);
@@ -172,7 +184,7 @@
 	// 			});
 	// 		}, 150);
 	// 	})).scroll();
-	// }());
+	}());
 
 	/* -----------------------------------------
 	Focus trapping
@@ -221,58 +233,62 @@
 	/* -----------------------------------------
 	 Header Search Toggle
 	 ----------------------------------------- */
-	const searchTrigger = document.querySelector('.global-search-form-trigger');
-	const searchDismiss = document.querySelector('.global-search-form-dismiss');
 	const headSearchForm = document.querySelector('.global-search-form');
 
-	function dismissHeadSearch(e) {
-		if (e) {
-			e.preventDefault();
+	if(headSearchForm) {
+		const searchTrigger = document.querySelector('.global-search-form-trigger');
+		const searchDismiss = document.querySelector('.global-search-form-dismiss');
+
+		function dismissHeadSearch(e) {
+			if (e) {
+				e.preventDefault();
+			}
+
+			headSearchForm.classList.remove('global-search-form-expanded');
+			body.focus();
 		}
 
-		headSearchForm.classList.remove('global-search-form-expanded');
-		body.focus();
-	}
+		function displayHeadSearch(e) {
+			if (e) {
+				e.preventDefault();
+			}
 
-	function displayHeadSearch(e) {
-		if (e) {
-			e.preventDefault();
+			headSearchForm.classList.add('global-search-form-expanded');
+			headSearchForm.querySelector('input').focus();
 		}
 
-		headSearchForm.classList.add('global-search-form-expanded');
-		headSearchForm.querySelector('input').focus();
-	}
-
-	function isHeadSearchVisible() {
-		return headSearchForm.classList.contains('global-search-form-expanded');
-	}
-
-	if (searchTrigger) {
-		searchTrigger.addEventListener('click', displayHeadSearch);
-		searchDismiss.addEventListener('click', dismissHeadSearch);
-	}
-
-	/* Event propagations */
-	document.addEventListener('keydown', function (e) {
-		e = e || window.e;
-		if (e.keyCode === 27 && isHeadSearchVisible()) {
-			dismissHeadSearch(e);
-		}
-	});
-
-	body.addEventListener('click', function () {
-		if (isHeadSearchVisible()) {
-			dismissHeadSearch();
+		function isHeadSearchVisible() {
+			return headSearchForm.classList.contains('global-search-form-expanded');
 		}
 
-		const searchFormElements = document.querySelectorAll('.global-search-form, .global-search-form-trigger');
+		if (searchTrigger) {
+			searchTrigger.addEventListener('click', displayHeadSearch);
+			searchDismiss.addEventListener('click', dismissHeadSearch);
+		}
 
-		searchFormElements.forEach(function (elem) {
-			elem.addEventListener('click', function (e) {
-				e.stopPropagation();
-			})
+		/* Event propagations */
+		document.addEventListener('keydown', function (e) {
+			e = e || window.e;
+			if (e.keyCode === 27 && isHeadSearchVisible()) {
+				dismissHeadSearch(e);
+			}
 		});
-	});
+
+		body.addEventListener('click', function () {
+			if (isHeadSearchVisible()) {
+				dismissHeadSearch();
+			}
+
+			const searchFormElements = document.querySelectorAll('.global-search-form, .global-search-form-trigger');
+
+			searchFormElements.forEach(function (elem) {
+				elem.addEventListener('click', function (e) {
+					e.stopPropagation();
+				})
+			});
+		});
+	}
+
 
 	/* -----------------------------------------
 	 Category Filters
