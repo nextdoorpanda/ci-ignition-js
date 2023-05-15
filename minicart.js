@@ -1,44 +1,72 @@
-jQuery( function ( $ ) {
+(function () {
 	'use strict';
 
-	var $body = $( 'body' );
+	const body = document.body;
 
 	/* -----------------------------------------
 	Shop filters toggle && Mini Cart visibility
 	----------------------------------------- */
-	var $miniCartTrigger = $( '.header-mini-cart-trigger' );
-	var $miniCart        = $( '.header-mini-cart-contents' );
+	const miniCartTrigger = document.querySelector( '.header-mini-cart-trigger' );
+	const miniCart = document.querySelector( '.header-mini-cart-contents' );
 
+	//TODO: Maybe also check for display/visibility properties?
 	function isMiniCartVisible() {
-		return $miniCart.is( ':visible' );
+		const rect = miniCart.getBoundingClientRect();
+		return (
+			rect.width > 0 &&
+			rect.height > 0 &&
+			rect.top < window.innerHeight &&
+			rect.left < window.innerWidth
+		);
 	}
 
+	//TODO: Fix smooth transition effect
 	function dismissMiniCart() {
-		$miniCart.removeClass( 'visible' );
-		$miniCart.fadeOut( 'fast' );
+		miniCart.classList.remove('visible');
+		miniCart.style.opacity = 1;
+		miniCart.style.transition = 'opacity 500ms ease-in-out';
+		// miniCart.style.opacity = 0;
+		// miniCart.style.display = 'none';
+
+		setTimeout(function () {
+			miniCart.style.opacity = 0;
+			// miniCart.style.display = 'none';
+		}, 200);
 	}
 
+	//TODO: Fix smooth transition effect
 	function displayMiniCart() {
-		$miniCart.addClass( 'visible' );
-		$miniCart.fadeIn( 'fast' );
+		miniCart.classList.add('visible');
+		miniCart.style.opacity = '0';
+		miniCart.style.display = 'block';
+		miniCart.style.transition = 'opacity 500ms~ ease-in-out';
+		// miniCart.style.opacity = '1';
+
+		setTimeout(function () {
+			miniCart.style.opacity = '1';
+		}, 200);
+
 	}
 
-	$miniCartTrigger.on( 'click', function ( event ) {
-		event.preventDefault();
+	miniCartTrigger.addEventListener('click', function (e) {
+		e.preventDefault();
 
-		if ( isMiniCartVisible() ) {
+		if (isMiniCartVisible()) {
 			dismissMiniCart();
 		} else {
 			displayMiniCart();
 		}
-	} );
+	});
+
 
 	/* Event propagations */
-	$( document ).on( 'keydown', function ( event ) {
-		if ( event.keyCode === 27 ) {
-			dismissMiniCart();
+	document.addEventListener('keydown', function (e) {
+		e = e || window.e;
+		if (e.keyCode === 27 && isMiniCartVisible()) {
+			dismissMiniCart(e);
 		}
-	} );
+	});
+
 
 	$body
 		.on( 'click', function ( event ) {
@@ -46,4 +74,4 @@ jQuery( function ( $ ) {
 				dismissMiniCart();
 			}
 		} );
-} );
+})();
