@@ -65,10 +65,9 @@
 	});
 
 
-	$body
-		.on( 'click', function ( event ) {
-			if ( $(event.target).parents('.head-mini-cart-wrap').length === 0 && isMiniCartVisible() ) {
-				dismissMiniCart();
-			}
-		} );
+	body.addEventListener('click', function (e) {
+		if(!e.target.closest('.head-mini-cart-wrap') && isMiniCartVisible()) {
+			dismissMiniCart();
+		}
+	});
 })();
