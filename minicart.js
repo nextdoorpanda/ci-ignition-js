@@ -20,30 +20,27 @@
 		);
 	}
 
-	//TODO: Fix smooth transition effect
 	function dismissMiniCart() {
 		miniCart.classList.remove('visible');
-		miniCart.style.opacity = 1;
+
 		miniCart.style.transition = 'opacity 500ms ease-in-out';
-		// miniCart.style.opacity = 0;
-		// miniCart.style.display = 'none';
+		miniCart.style.opacity = 0;
 
 		setTimeout(function () {
 			miniCart.style.opacity = 0;
-			// miniCart.style.display = 'none';
+			miniCart.style.display = 'none';
 		}, 200);
 	}
 
-	//TODO: Fix smooth transition effect
 	function displayMiniCart() {
 		miniCart.classList.add('visible');
-		miniCart.style.opacity = '0';
+
+		miniCart.style.opacity = 0;
 		miniCart.style.display = 'block';
-		miniCart.style.transition = 'opacity 500ms~ ease-in-out';
-		// miniCart.style.opacity = '1';
+		miniCart.style.transition = 'opacity 500ms ease-in-out';
 
 		setTimeout(function () {
-			miniCart.style.opacity = '1';
+			miniCart.style.opacity = 1;
 		}, 200);
 
 	}
