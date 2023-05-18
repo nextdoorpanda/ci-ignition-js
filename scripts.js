@@ -269,7 +269,6 @@
 
 		/* Event propagations */
 		document.addEventListener('keydown', function (e) {
-			e = e || window.e;
 			if (e.keyCode === 27 && isHeadSearchVisible()) {
 				dismissHeadSearch(e);
 			}
