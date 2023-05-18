@@ -60,7 +60,6 @@
 
 	/* Event propagations */
 	document.addEventListener('keydown', function (event) {
-		e = e || window.e;
 		if (event.keyCode === 27 && isMiniCartVisible()) {
 			dismissMiniCart(event);
 		}
