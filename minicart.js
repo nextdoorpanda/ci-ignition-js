@@ -47,8 +47,8 @@
 
 	}
 
-	miniCartTrigger.addEventListener('click', function (event) {
-		event.preventDefault();
+	miniCartTrigger.addEventListener('click', function (e) {
+		e.preventDefault();
 
 		if (isMiniCartVisible()) {
 			dismissMiniCart();
@@ -67,8 +67,8 @@
 	});
 
 
-	body.addEventListener('click', function (event) {
-		if(!event.target.closest('.head-mini-cart-wrap') && isMiniCartVisible()) {
+	body.addEventListener('click', function (e) {
+		if(!e.target.closest('.head-mini-cart-wrap') && isMiniCartVisible()) {
 			dismissMiniCart();
 		}
 	});
