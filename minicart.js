@@ -9,14 +9,16 @@
 	const miniCartTrigger = document.querySelector( '.header-mini-cart-trigger' );
 	const miniCart = document.querySelector( '.header-mini-cart-contents' );
 
-	//TODO: Maybe also check for display/visibility properties?
 	function isMiniCartVisible() {
 		const rect = miniCart.getBoundingClientRect();
+
 		return (
 			rect.width > 0 &&
 			rect.height > 0 &&
 			rect.top < window.innerHeight &&
-			rect.left < window.innerWidth
+			rect.left < window.innerWidth &&
+			miniCart.style.display !== 'none' &&
+			miniCart.style.visibility !== 'hidden'
 		);
 	}
 
