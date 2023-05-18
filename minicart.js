@@ -47,8 +47,8 @@
 
 	}
 
-	miniCartTrigger.addEventListener('click', function (e) {
-		e.preventDefault();
+	miniCartTrigger.addEventListener('click', function (event) {
+		event.preventDefault();
 
 		if (isMiniCartVisible()) {
 			dismissMiniCart();
@@ -59,16 +59,16 @@
 
 
 	/* Event propagations */
-	document.addEventListener('keydown', function (e) {
+	document.addEventListener('keydown', function (event) {
 		e = e || window.e;
-		if (e.keyCode === 27 && isMiniCartVisible()) {
-			dismissMiniCart(e);
+		if (event.keyCode === 27 && isMiniCartVisible()) {
+			dismissMiniCart(event);
 		}
 	});
 
 
-	body.addEventListener('click', function (e) {
-		if(!e.target.closest('.head-mini-cart-wrap') && isMiniCartVisible()) {
+	body.addEventListener('click', function (event) {
+		if(!event.target.closest('.head-mini-cart-wrap') && isMiniCartVisible()) {
 			dismissMiniCart();
 		}
 	});
