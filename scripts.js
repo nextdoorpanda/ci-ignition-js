@@ -28,7 +28,10 @@
 	mobileNav.querySelectorAll('li').forEach(function (item) {
 		if (item.querySelector('.sub-menu')) {
 			const btn = document.createElement('button');
+			const btnSpan = '<span class="sr-only">Expand submenu</span>';
+
 			btn.classList.add('menu-item-sub-menu-toggle');
+			btn.innerHTML = btnSpan;
 			item.appendChild(btn);
 		}
 	});
