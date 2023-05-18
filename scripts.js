@@ -130,7 +130,7 @@
 		const offset = 85;
 
 		navs.forEach(function (el) {
-			el.addEventListener('click', function (e) {
+			el.addEventListener('click', function (event) {
 				// Check if the element exists on page before continuing
 				const target = document.querySelector(el.hash);
 
@@ -138,7 +138,7 @@
 					return;
 				}
 
-				e.preventDefault();
+				event.preventDefault();
 
 				if (target && !target.classList.contains('elementor-menu-anchor')) {
 					mobileNavDismiss();
@@ -204,8 +204,8 @@
 	const btnTop = document.querySelector('.btn-to-top');
 
 	if (btnTop !== null) {
-		btnTop.addEventListener('click', function (e) {
-			e.preventDefault();
+		btnTop.addEventListener('click', function (event) {
+			event.preventDefault();
 
 			//TODO: fix scrolling speed (.animate 'fast' === 200ms)
 			window.scrollTo({top: 0, behavior: 'smooth'});
@@ -240,19 +240,15 @@
 		const searchTrigger = document.querySelector('.global-search-form-trigger');
 		const searchDismiss = document.querySelector('.global-search-form-dismiss');
 
-		function dismissHeadSearch(e) {
-			if (e) {
-				e.preventDefault();
-			}
+		function dismissHeadSearch(event) {
+			event.preventDefault();
 
 			headSearchForm.classList.remove('global-search-form-expanded');
 			body.focus();
 		}
 
-		function displayHeadSearch(e) {
-			if (e) {
-				e.preventDefault();
-			}
+		function displayHeadSearch(event) {
+			event.preventDefault();
 
 			headSearchForm.classList.add('global-search-form-expanded');
 			headSearchForm.querySelector('input').focus();
@@ -268,9 +264,9 @@
 		}
 
 		/* Event propagations */
-		document.addEventListener('keydown', function (e) {
-			if (e.keyCode === 27 && isHeadSearchVisible()) {
-				dismissHeadSearch(e);
+		document.addEventListener('keydown', function (event) {
+			if (event.keyCode === 27 && isHeadSearchVisible()) {
+				dismissHeadSearch(event);
 			}
 		});
 
@@ -282,8 +278,8 @@
 			const searchFormElements = document.querySelectorAll('.global-search-form, .global-search-form-trigger');
 
 			searchFormElements.forEach(function (elem) {
-				elem.addEventListener('click', function (e) {
-					e.stopPropagation();
+				elem.addEventListener('click', function (event) {
+					event.stopPropagation();
 				})
 			});
 		});
@@ -307,8 +303,8 @@
 		}
 
 		filters.forEach(function (el) {
-			el.addEventListener('click', function (e) {
-				e.preventDefault();
+			el.addEventListener('click', function (event) {
+				event.preventDefault();
 				removeActiveClass();
 				el.classList.add('filter-active');
 
