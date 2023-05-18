@@ -116,7 +116,7 @@
 
 		const mobileMenuNavs = mobileNav.querySelectorAll('a[href*="#"]');
 
-		const filteredMobileLinks = Array.from(mobileMenuNavs).filter(function (item) {
+		const filteredMobileLinks = [...mobileMenuNavs].filter(function (item) {
 			const rejectedHrefs = ['#', 'http://#', 'https://#', '#mobilemenu', '#nav-dismiss'];
 			return !rejectedHrefs.includes(item.getAttribute('href'))
 		});
@@ -327,16 +327,16 @@
 					return;
 				}
 
-				Array.from(allItems).forEach(item => {
-					if (!Array.from(items).includes(item)) {
+				[...allItems].forEach(item => {
+					if (![...items].includes(item)) {
 						item.style.transition = 'opacity 500ms';
 						item.style.opacity = 0;
 					}
 
 					setTimeout(function () {
-						Array.from(allItems).forEach(function (item) {
+						[...allItems].forEach(function (item) {
 							item.style.transition = 'opacity 500ms';
-							if (!Array.from(items).includes(item)) {
+							if (![...items].includes(item)) {
 								item.style.display = 'none';
 								item.style.opacity = 0;
 							} else {
