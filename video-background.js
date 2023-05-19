@@ -76,15 +76,22 @@
 	}
 
 	function onSelfHostedVideo() {
-		var source = $videoBg.data('video-id');
+		const source = videoBg.dataset.videoId;
+		const nativeVideo = document.createElement('video');
+		nativeVideo.src = source;
 
-		var $nativeVideo = $('<video src="'+ source +'" autoplay muted loop playsinline />')
-			.on('playing', function () {
-				$videoWrap.addClass('visible');
-			});
+		const selfHostedVideoAttributes = ['autoplay', 'muted', 'loop', 'playsinline'];
 
-		$videoBg.append($nativeVideo);
-		$window.off('resize.ciVideo');
+		selfHostedVideoAttributes.forEach(function (attr) {
+			nativeVideo[attr] = true;
+		})
+
+		nativeVideo.addEventListener('playing', function () {
+			videoWrap.classList.add('visible');
+		});
+
+		videoBg.append(nativeVideo);
+		window.removeEventListener('resize', handleVideoResize);
 	}
 
 	let videoResizeTimer;
@@ -115,7 +122,15 @@
 	function adjustVideoSize() {
 		const size = getVideoSize();
 		const iframe = videoBg.querySelector('iframe');
+		const video = videoBg.querySelector('video');
 
+		// if (iframe) {
+		// 	iframe.style.width = `${size.width}px`;
+		// 	iframe.style.height = `${size.height}px`;
+		// } else if (video) {
+		// 	video.style.width = `${size.width}px`;
+		// 	video.style.height = `${size.height}px`;
+		// }
 		iframe.style.width = `${size.width}px`;
 		iframe.style.height = `${size.height}px`;
 	}
