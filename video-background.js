@@ -98,12 +98,12 @@
 	window.addEventListener( 'resize', handleVideoResize);
 
 	function getVideoSize() {
-		var containerWidth = $videoWrap.outerWidth();
-		var containerHeight = $videoWrap.outerHeight();
-		var aspectRatio = 16/9;
-		var ratioWidth = containerWidth / aspectRatio;
-		var ratioHeight = containerHeight * aspectRatio;
-		var isWidthFixed = (containerWidth / containerHeight) > aspectRatio;
+		const containerWidth = videoWrap.offsetWidth;
+		const containerHeight = videoWrap.offsetHeight;
+		const aspectRatio = 16/9;
+		const ratioWidth = containerWidth / aspectRatio;
+		const ratioHeight = containerHeight * aspectRatio;
+		const isWidthFixed = (containerWidth / containerHeight) > aspectRatio;
 
 		return {
 			width: isWidthFixed ? containerWidth : ratioHeight,
