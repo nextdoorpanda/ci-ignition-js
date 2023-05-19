@@ -117,7 +117,7 @@
 		const iframe = videoBg.querySelector('iframe');
 
 		iframe.style.width = `${size.width}px`;
-		iframe.style.width = `${size.height}px`;
+		iframe.style.height = `${size.height}px`;
 	}
 
 	if (videoBg && window.innerWidth > 1080) {
