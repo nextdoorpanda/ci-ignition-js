@@ -1,16 +1,14 @@
-jQuery(function ($) {
+(function () {
 	'use strict';
-
-	var $window = $(window);
 
 	/* -----------------------------------------
 	 Page Hero Video Backgrounds
 	 ----------------------------------------- */
-	var $videoBg = $('.page-hero-video-background');
-	var $videoWrap = $videoBg.parents('.page-hero-video-wrap');
+	const videoBg = document.querySelector('.page-hero-video-background');
+	const videoWrap = videoBg.closest('.page-hero-video-wrap');
 
 	// YouTube videos
-	function onYouTubeAPIReady($videoBg) {
+	function onYouTubeAPIReady(videoBg) {
 		if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
 			return setTimeout(onYouTubeAPIReady.bind(null, $videoBg), 333);
 		}
@@ -145,4 +143,4 @@ jQuery(function ($) {
 			}
 		});
 	}
-});
+})();
