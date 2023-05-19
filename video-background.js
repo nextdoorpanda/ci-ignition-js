@@ -46,15 +46,15 @@
 	}
 
 	// Vimeo videos
-	function onVimeoAPIReady($videoBg) {
+	function onVimeoAPIReady(videoBg) {
 		if (typeof Vimeo === 'undefined' || typeof Vimeo.Player === 'undefined') {
-			return setTimeout(onVimeoAPIReady.bind(null, $videoBg), 333);
+			return setTimeout(onVimeoAPIReady.bind(null, videoBg), 333);
 		}
 
-		var startTime = parseInt($videoBg.data('video-start'), 10) || undefined;
+		const startTime = parseInt(videoBg.dataset.videoStart, 10) || undefined;
 
-		var player = new Vimeo.Player($videoBg, {
-			id: $videoBg.data('video-id'),
+		const player = new Vimeo.Player(videoBg, {
+			id: videoBg.dataset.videoId,
 			loop: true,
 			autoplay: true,
 			byline: false,
@@ -70,7 +70,7 @@
 		}
 
 		player.on('play', function () {
-			$videoWrap.addClass('visible');
+			videoWrap.classList.add('visible');
 			adjustVideoSize();
 		});
 	}
