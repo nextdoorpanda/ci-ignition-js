@@ -86,10 +86,10 @@
 		$window.off('resize.ciVideo');
 	}
 
-	var videoResizeTimer;
+	let videoResizeTimer;
 
-	$window.on( 'resize.ciVideo', function () {
-		clearTimeout( videoResizeTimer );
+	window.addEventListener( 'resize', function () {
+		clearTimeout(videoResizeTimer);
 		videoResizeTimer = setTimeout( function () {
 			adjustVideoSize();
 		}, 350 );
