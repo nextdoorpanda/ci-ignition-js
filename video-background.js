@@ -112,12 +112,11 @@
 	}
 
 	function adjustVideoSize() {
-		var size = getVideoSize();
+		const size = getVideoSize();
+		const iframe = videoBg.querySelector('iframe');
 
-		$videoBg.find('iframe').css({
-			width: size.width + 'px',
-			height: size.height + 'px',
-		});
+		iframe.style.width = `${size.width}px`;
+		iframe.style.width = `${size.height}px`;
 	}
 
 	if ($videoBg.length && window.innerWidth > 1080) {
