@@ -88,12 +88,14 @@
 
 	let videoResizeTimer;
 
-	window.addEventListener( 'resize', function () {
+	function handleVideoResize() {
 		clearTimeout(videoResizeTimer);
 		videoResizeTimer = setTimeout( function () {
 			adjustVideoSize();
 		}, 350 );
-	} );
+	}
+
+	window.addEventListener( 'resize', handleVideoResize);
 
 	function getVideoSize() {
 		var containerWidth = $videoWrap.outerWidth();
