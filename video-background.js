@@ -122,15 +122,7 @@
 	function adjustVideoSize() {
 		const size = getVideoSize();
 		const iframe = videoBg.querySelector('iframe');
-		const video = videoBg.querySelector('video');
 
-		// if (iframe) {
-		// 	iframe.style.width = `${size.width}px`;
-		// 	iframe.style.height = `${size.height}px`;
-		// } else if (video) {
-		// 	video.style.width = `${size.width}px`;
-		// 	video.style.height = `${size.height}px`;
-		// }
 		iframe.style.width = `${size.width}px`;
 		iframe.style.height = `${size.height}px`;
 	}
