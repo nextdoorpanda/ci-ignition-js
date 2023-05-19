@@ -15,19 +15,19 @@
 
 		const video = videoBg.querySelector('div');
 		const ytPlayer = new YT.Player(video, {
-			videoId: videoBg.getAttribute('video-id'),
+			videoId: videoBg.dataset.videoId,
 			playerVars: {
 				autoplay: 1,
 				controls: 0,
 				showinfo: 0,
 				modestbranding: 1,
 				loop: 1,
-				playlist: videoBg.getAttribute('video-id'),
+				playlist: videoBg.dataset.videoId,
 				fs: 0,
 				cc_load_policy: 0,
 				iv_load_policy: 3,
 				autohide: 0,
-				start: parseInt(videoBg.getAttribute('video-start'), 10) || undefined,
+				start: parseInt(videoBg.dataset.videoStart, 10) || undefined,
 			},
 			events: {
 				onReady: function (event) {
