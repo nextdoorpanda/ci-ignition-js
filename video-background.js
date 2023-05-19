@@ -86,25 +86,22 @@
 		$window.off('resize.ciVideo');
 	}
 
-
 	let videoResizeTimer;
 
-	function handleVideoResizeTimer() {
+	window.addEventListener( 'resize', function () {
 		clearTimeout(videoResizeTimer);
 		videoResizeTimer = setTimeout( function () {
 			adjustVideoSize();
 		}, 350 );
-	}
-
-	window.addEventListener( 'resize', handleVideoResizeTimer);
+	} );
 
 	function getVideoSize() {
-		const containerWidth = videoWrap.offsetWidth;
-		const containerHeight = videoWrap.offsetHeight;
-		const aspectRatio = 16/9;
-		const ratioWidth = containerWidth / aspectRatio;
-		const ratioHeight = containerHeight * aspectRatio;
-		const isWidthFixed = (containerWidth / containerHeight) > aspectRatio;
+		var containerWidth = $videoWrap.outerWidth();
+		var containerHeight = $videoWrap.outerHeight();
+		var aspectRatio = 16/9;
+		var ratioWidth = containerWidth / aspectRatio;
+		var ratioHeight = containerHeight * aspectRatio;
+		var isWidthFixed = (containerWidth / containerHeight) > aspectRatio;
 
 		return {
 			width: isWidthFixed ? containerWidth : ratioHeight,
