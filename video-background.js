@@ -10,24 +10,24 @@
 	// YouTube videos
 	function onYouTubeAPIReady(videoBg) {
 		if (typeof YT === 'undefined' || typeof YT.Player === 'undefined') {
-			return setTimeout(onYouTubeAPIReady.bind(null, $videoBg), 333);
+			return setTimeout(onYouTubeAPIReady.bind(null, videoBg), 333);
 		}
 
-		var $video = $videoBg.find('div').get(0);
-		var ytPlayer = new YT.Player($video, {
-			videoId: $videoBg.data('video-id'),
+		const video = videoBg.querySelector('div');
+		const ytPlayer = new YT.Player(video, {
+			videoId: videoBg.getAttribute('video-id'),
 			playerVars: {
 				autoplay: 1,
 				controls: 0,
 				showinfo: 0,
 				modestbranding: 1,
 				loop: 1,
-				playlist: $videoBg.data('video-id'),
+				playlist: videoBg.getAttribute('video-id'),
 				fs: 0,
 				cc_load_policy: 0,
 				iv_load_policy: 3,
 				autohide: 0,
-				start: parseInt($videoBg.data('video-start'), 10) || undefined,
+				start: parseInt(videoBg.getAttribute('video-start'), 10) || undefined,
 			},
 			events: {
 				onReady: function (event) {
@@ -36,7 +36,7 @@
 				},
 				onStateChange: function (event) {
 					if (event.data === YT.PlayerState.PLAYING) {
-						$videoWrap.addClass('visible');
+						videoWrap.classList.add('visible');
 						adjustVideoSize();
 					}
 				}
