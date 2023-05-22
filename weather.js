@@ -1,62 +1,78 @@
-jQuery(function ($) {
+(function () {
 	'use strict';
 
 	/* -----------------------------------------
 	 Weather
 	 ----------------------------------------- */
-	function ignitionShowWeather( $container, weather_data ) {
+	function ignitionShowWeather( container, weather_data ) {
 		if ( weather_data.error ) {
 			return;
 		}
 
-		var $temp      = $container.find( '.theme-weather-temperature-value' );
-		var $unit      = $container.find( '.theme-weather-temperature-unit' );
-		var $location  = $container.find( '.theme-weather-location' );
+		const temp = container.querySelector('.theme-weather-temperature-value');
+		const unit = container.querySelector('.theme-weather-temperature-unit');
+		const location = container.querySelector('.theme-weather-location');
 
-		$temp.html( Math.round( weather_data.temperature ) );
-		$unit.html( weather_data.units_symbol );
-		$location.html( weather_data.location_formatted );
+		temp.innerHTML = Math.round(weather_data.temperature);
+		unit.innerHTML = weather_data.units_symbol;
+		location.innerHTML = weather_data.location_formatted;
 	}
 
-	var $weather = $( '.theme-weather' );
+	const weather = document.querySelectorAll('.theme-weather');
 
-	$weather.each( function () {
-		var $this      = $( this );
-		var locationId = $this.data( 'location-id' );
-		var units      = $this.data( 'units' );
+	weather.forEach(function (item) {
+		const locationId = item.dataset.locationId;
+		const units = item.dataset.units;
 
-		var weather_key = 'ignition-weather-data' + '-' + units + '-' + locationId;
-		var weather_fetch_time_key = weather_key + '-fetch-time';
+		const weather_key = `ignition-weather-data-${units}-${locationId}`;
+		const weather_fetch_time_key = `${weather_key}-fetch-time`;
 
-		var apiHitRate = 1000 * 60 * 5;
-		var runTime    = Date.now();
-		var fetchTime  = localStorage.getItem( weather_fetch_time_key );
+		const apiHitRate = 1000 * 60 * 5;
+		const runTime = Date.now();
+		const fetchTime = localStorage.getItem(weather_fetch_time_key);
 
-
-		var response = JSON.parse( localStorage.getItem( weather_key ) );
-		if ( response ) {
-			ignitionShowWeather( $this, response );
+		const response = JSON.parse( localStorage.getItem(weather_key) );
+		if (response) {
+			ignitionShowWeather(item, response);
 		}
+		// console.log(ignition_weather_vars.weather_nonce);
 
-		if ( ( fetchTime === null ) || ( ( runTime - parseInt( fetchTime ) ) > apiHitRate ) ) {
-			$.ajax( {
-				url: ignition_weather_vars.ajaxurl,
-				data: {
-					action: 'ignition_get_weather_conditions',
-					weather_nonce: ignition_weather_vars.weather_nonce,
-					location_id: locationId,
-					units: units,
-				},
-				dataType: 'json',
-				cache: false,
-			} ).done( function ( response ) {
-				localStorage.setItem( weather_fetch_time_key, Date.now() );
-				localStorage.setItem( weather_key, JSON.stringify( response ) );
-				ignitionShowWeather( $this, response );
-			} ).fail( function ( response ) {
-				console.error( 'Ignition weather module :: ', response.responseText );
-			} );
+		if (!fetchTime || (runTime - parseInt(fetchTime)) > apiHitRate) {
+
+			//TODO: Maybe refactor this using data object link in jQuery .ajax()?)
+			async function getWeatherData() {
+				try {
+					const url = `${ignition_weather_vars.ajaxurl}?action=ignition_get_weather_conditions&weather_nonce=${ignition_weather_vars.weather_nonce}&location_id=${locationId}&units=${units}&cache=false`;
+					const response = await fetch(url);
+					const data = await response.json();
+					localStorage.setItem(weather_fetch_time_key, Date.now());
+					localStorage.setItem(weather_key, JSON.stringify(data));
+					ignitionShowWeather(item, response);
+				} catch (error) {
+					console.error('Ignition weather module :: ', error);
+				}
+			}
+
+			getWeatherData();
+
+			// $.ajax( {
+			// 	url: ignition_weather_vars.ajaxurl,
+			// 	data: {
+			// 		action: 'ignition_get_weather_conditions',
+			// 		weather_nonce: ignition_weather_vars.weather_nonce,
+			// 		location_id: locationId,
+			// 		units: units,
+			// 	},
+			// 	dataType: 'json',
+			// 	cache: false,
+			// } ).done( function ( response ) {
+			// 	localStorage.setItem( weather_fetch_time_key, Date.now() );
+			// 	localStorage.setItem( weather_key, JSON.stringify( response ) );
+			// 	ignitionShowWeather( $this, response );
+			// } ).fail( function ( response ) {
+			// 	console.error( 'Ignition weather module :: ', response.responseText );
+			// } );
 		}
-	} );
+	});
 
-});
+})();
