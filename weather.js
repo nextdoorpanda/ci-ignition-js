@@ -35,7 +35,6 @@
 		if (response) {
 			ignitionShowWeather(item, response);
 		}
-		// console.log(ignition_weather_vars.weather_nonce);
 
 		if (!fetchTime || (runTime - parseInt(fetchTime)) > apiHitRate) {
 
