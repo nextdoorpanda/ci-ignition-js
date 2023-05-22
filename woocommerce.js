@@ -39,36 +39,31 @@
 	const filtersDismiss = document.querySelector('.sidebar-dismiss');
 
 	function isFiltersVisible() {
-		return $body.hasClass('sidebar-drawer-visible');
+		return body.classList.contains('sidebar-drawer-visible');
 	}
 
 	function dismissFilters(event) {
-		if (event) {
-			event.preventDefault();
-		}
-		$body.removeClass('sidebar-drawer-visible');
+		event.preventDefault();
+		body.classList.remove('sidebar-drawer-visible');
 	}
 
 	function displayFilters(event) {
-		if (event) {
-			event.preventDefault();
-		}
-		$body.addClass('sidebar-drawer-visible')
+		event.preventDefault();
+		body.classList.add('sidebar-drawer-visible')
 	}
 
-	$filtersToggle.on('click', displayFilters);
-	$filtersDismiss.on('click', dismissFilters);
+	filtersToggle.addEventListener('click', displayFilters);
+	filtersDismiss.addEventListener('click', dismissFilters);
 
 	/* Event propagations */
-	$(document).on('keydown', function (event) {
-		if (event.keyCode === 27) {
+	document.addEventListener('keydown', function (event) {
+		if (event.keyCode === 27 && isFiltersVisible()) {
 			dismissFilters(event);
 		}
 	});
 
-	$body
-		.on('click', function (event) {
-			if (!$filtersWrap.length) {
+	body.addEventListener('click', function (event) {
+			if (!filtersWrap) {
 				return;
 			}
 
@@ -76,18 +71,20 @@
 			// which can break functionality from 3rd party plugins
 			// we check if the element is part of the sidebar
 			// and prevent the sidebar from closing if true.
-			if ($(event.target).parents('.sidebar-drawer').length > 0) {
+			if (event.target.closest('.sidebar-drawer')) {
 				return;
 			}
 
 			if (isFiltersVisible()) {
-				dismissFilters();
+				dismissFilters(event);
 			}
-		})
-		.find('.shop-filter-toggle, ' +
-			'.category-search-input ',
-			'.category-search-select')
-		.on('click', function (event) {
-			event.stopPropagation();
+
+			const targetElements = document.querySelectorAll('.shop-filter-toggle, .category-search-input, .category-search-select');
+
+			targetElements.forEach(function (elem) {
+				elem.addEventListener('click', function (event) {
+					event.stopPropagation();
+				})
+			});
 		});
 })();
