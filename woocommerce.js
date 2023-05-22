@@ -1,7 +1,7 @@
-jQuery( function ( $ ) {
+(function () {
 	'use strict';
 
-	var $body = $('body');
+	const body = document.body;
 
 	/* -----------------------------------------
 	 WooCommerce plus minus
@@ -84,4 +84,4 @@ jQuery( function ( $ ) {
 		.on('click', function (event) {
 			event.stopPropagation();
 		});
-} );
+})();
