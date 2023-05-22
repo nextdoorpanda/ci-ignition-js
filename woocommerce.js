@@ -6,31 +6,37 @@
 	/* -----------------------------------------
 	 WooCommerce plus minus
 	 ----------------------------------------- */
-	$body.on( 'click', '.qty-btn', function () {
-		var $this        = $( this );
-		var $input       = $this.parent().find( 'input[type="number"]' );
-		var placeholder  = parseInt( $input.attr('placeholder') ) || 0;
-		var min          = parseInt( $input.attr( 'min' ) || 0, 10 );
-		var max          = parseInt( $input.attr( 'max' ) || 99999, 10 );
-		var currentVal   = parseInt($input.val(), 10) ? parseInt($input.val(), 10) : placeholder;
-		var isMinus      = $this.hasClass( 'qty-minus' );
+	const quantityButtons = body.querySelectorAll('.qty-btn');
 
-		if ( isMinus ) {
-			$input.val( Math.max( currentVal - 1, min ) );
-		} else {
-			$input.val( Math.min( currentVal + 1, max ) );
-		}
+	quantityButtons.forEach(function (btn) {
+		btn.addEventListener('click', function (event) {
+			event.preventDefault();
 
-		$input.trigger( 'change' );
-	} );
+			const input = event.target.parentNode.querySelector('input[type="number"]');
+			const placeholder = parseInt(input.getAttribute('placeholder')) || 0;
+			const min = parseInt(input.getAttribute('min') || 0, 10);
+			const max = parseInt(input.getAttribute('max') || 99999, 10);
+			const currentVal = parseInt(input.value, 10) || placeholder;
+			const isMinus = event.target.classList.contains('qty-minus');
+
+			if (isMinus) {
+				input.value = Math.max(currentVal - 1, min);
+			} else {
+				input.value = Math.min(currentVal + 1, max);
+			}
+
+			const changeEvent = new Event('change');
+			input.dispatchEvent(changeEvent);
+		});
+	});
 
 
 	/* -----------------------------------------
 	Shop filters toggle
 	----------------------------------------- */
-	var $filtersWrap    = $( '.sidebar-drawer' );
-	var $filtersToggle  = $( '.shop-filter-toggle' );
-	var $filtersDismiss = $( '.sidebar-dismiss' );
+	const filtersWrap = document.querySelector('.sidebar-drawer');
+	const filtersToggle = document.querySelector('.shop-filter-toggle');
+	const filtersDismiss = document.querySelector('.sidebar-dismiss');
 
 	function isFiltersVisible() {
 		return $body.hasClass('sidebar-drawer-visible');
