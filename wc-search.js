@@ -4,20 +4,20 @@
  * @since 1.5.0
  */
 
-jQuery( function ( $ ) {
+(function () {
 	'use strict';
 
-	var $window = $( window );
-	var $body   = $( 'body' );
+	const body = document.body;
 
-	var $searchFormWrap = $( '.ignition-wc-search-form-wrap' );
-	var $searchForm = $('.ignition-wc-search-form');
+	const searchFormWrap = document.querySelector('.ignition-wc-search-form-wrap');
+	const searchForm = document.querySelector('.ignition-wc-search-form');
 
 	/* -----------------------------------------
 	 Ajax Product Search Toggle
+	 Ajax Product Search Toggle
 	 ----------------------------------------- */
-	var $searchTrigger = $('.ignition-wc-search-form-trigger');
-	var $searchDismiss = $('.ignition-wc-search-form-dismiss');
+	const searchTrigger = document.querySelector('.ignition-wc-search-form-trigger');
+	const searchDismiss = document.querySelector('.ignition-wc-search-form-dismiss');
 
 	function dismissWCSearch(e) {
 		if (e) {
@@ -256,4 +256,4 @@ jQuery( function ( $ ) {
 		};
 	}
 
-} );
+})();
