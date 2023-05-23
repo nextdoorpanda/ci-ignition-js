@@ -52,6 +52,7 @@
 		event.preventDefault();
 		body.classList.add('sidebar-drawer-visible');
 		filtersWrap.focus();
+		event.stopPropagation();
 	}
 
 	filtersToggle.addEventListener('click', displayFilters);
