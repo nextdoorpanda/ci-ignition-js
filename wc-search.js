@@ -28,6 +28,7 @@
 		event.preventDefault();
 		searchFormWrap.classList.add('ignition-wc-search-form-expanded');
 		searchFormWrap.querySelector('input').focus();
+		event.stopPropagation();
 	}
 
 	function isWCSearchVisible() {
