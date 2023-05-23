@@ -76,16 +76,23 @@
 		categoryResults.style.display = 'none';
 	}
 
-	function queryProducts(category, string) {
-		return $.ajax({
-			url: ignition_wc_search.ajax_url,
-			method: 'post',
-			data: {
-				action: 'ignition_wc_search_products',
-				product_cat: category,
-				s: string,
-			},
-		});
+	async function queryProducts(category, string) {
+		try {
+			const response = await fetch(ignition_wc_search.ajax_url, {
+				method: 'post',
+				body: {
+					action: 'ignition_wc_search_products',
+					product_cat: category,
+					s: string,
+				}
+			});
+
+			const data = await response.json();
+			return data;
+
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	function queryProductsAndPopulateResults(category, string) {
