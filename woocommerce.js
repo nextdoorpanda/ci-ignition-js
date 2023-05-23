@@ -45,11 +45,13 @@
 	function dismissFilters(event) {
 		event.preventDefault();
 		body.classList.remove('sidebar-drawer-visible');
+		body.focus();
 	}
 
 	function displayFilters(event) {
 		event.preventDefault();
-		body.classList.add('sidebar-drawer-visible')
+		body.classList.add('sidebar-drawer-visible');
+		filtersWrap.focus();
 	}
 
 	filtersToggle.addEventListener('click', displayFilters);
