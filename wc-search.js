@@ -66,11 +66,11 @@
 	/* -----------------------------------------
 	 Ajax Product Search
 	 ----------------------------------------- */
-	var $categoriesSelect = $('.ignition-wc-search-select');
-	var $searchInput = $('.ignition-wc-search-input');
-	var $categoryResults = $('.ignition-wc-search-results');
-	var $categoryResultsTemplate = $('.ignition-wc-search-results-item');
-	var $spinner = $('.ignition-wc-search-spinner');
+	const categoriesSelect = document.querySelector('.ignition-wc-search-select');
+	const searchInput = document.querySelector('.ignition-wc-search-input');
+	const categoryResults = document.querySelector('.ignition-wc-search-results');
+	const categoryResultsTemplate = document.querySelector('.ignition-wc-search-results-item');
+	const spinner = document.querySelector('.ignition-wc-search-spinner');
 
 	function dismissSearchResults() {
 		$categoryResults.hide();
