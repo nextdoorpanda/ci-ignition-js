@@ -273,9 +273,9 @@
 			}
 		});
 
-		body.addEventListener('click', function () {
+		body.addEventListener('click', function (event) {
 			if (isHeadSearchVisible()) {
-				dismissHeadSearch();
+				dismissHeadSearch(event);
 			}
 
 			const searchFormElements = document.querySelectorAll('.global-search-form, .global-search-form-trigger');
