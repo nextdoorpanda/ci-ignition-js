@@ -73,7 +73,7 @@
 	const spinner = document.querySelector('.ignition-wc-search-spinner');
 
 	function dismissSearchResults() {
-		$categoryResults.hide();
+		categoryResults.style.display = 'none';
 	}
 
 	function queryProducts(category, string) {
