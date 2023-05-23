@@ -255,6 +255,7 @@
 
 			headSearchForm.classList.add('global-search-form-expanded');
 			headSearchForm.querySelector('input').focus();
+			event.stopPropagation();
 		}
 
 		function isHeadSearchVisible() {
