@@ -101,7 +101,7 @@
 			return;
 		}
 
-		$searchFormWrap.addClass('is-loading');
+		searchFormWrap.classList.add('is-loading');
 
 		return queryProducts(category, string)
 			.done(function (response) {
@@ -235,11 +235,19 @@
 		});
 	}
 
-	$body.on('click', function () {
-		dismissSearchResults();
-	}).find('.ignition-wc-search-input, .ignition-wc-search-select').on('click', function (event) {
-		event.stopPropagation();
-	});
+	body.addEventListener('click', function (event) {
+		if (isWCSearchVisible()) {
+			dismissSearchResults(event);
+		}
+
+		const searchResultsElements = document.querySelectorAll('.ignition-wc-search-input, .ignition-wc-search-select');
+
+		searchResultsElements.forEach(function (elem) {
+			elem.addEventListener('click', function (event) {
+				event.stopPropagation();
+			});
+		});
+
 
 	// Returns a function, that, as long as it continues to be invoked, will not
 	// be triggered. The function will be called after it stops being called for
