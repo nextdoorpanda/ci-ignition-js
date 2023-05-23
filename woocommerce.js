@@ -55,8 +55,10 @@
 		event.stopPropagation();
 	}
 
-	filtersToggle.addEventListener('click', displayFilters);
-	filtersDismiss.addEventListener('click', dismissFilters);
+	if(filtersToggle) {
+		filtersToggle.addEventListener('click', displayFilters);
+		filtersDismiss.addEventListener('click', dismissFilters);
+	}
 
 	/* Event propagations */
 	document.addEventListener('keydown', function (event) {
