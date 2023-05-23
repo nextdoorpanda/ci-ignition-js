@@ -14,56 +14,52 @@
 
 	/* -----------------------------------------
 	 Ajax Product Search Toggle
-	 Ajax Product Search Toggle
 	 ----------------------------------------- */
 	const searchTrigger = document.querySelector('.ignition-wc-search-form-trigger');
 	const searchDismiss = document.querySelector('.ignition-wc-search-form-dismiss');
 
-	function dismissWCSearch(e) {
-		if (e) {
-			e.preventDefault();
-		}
-
-		$searchFormWrap.removeClass('ignition-wc-search-form-expanded');
-		$body.focus();
+	function dismissWCSearch(event) {
+		event.preventDefault();
+		searchFormWrap.classList.remove('ignition-wc-search-form-expanded');
+		body.focus();
 	}
 
-	function displayWCSearch(e) {
-		if (e) {
-			e.preventDefault();
-		}
-
-		$searchFormWrap
-			.addClass('ignition-wc-search-form-expanded')
-			.find('input')
-			.focus();
+	function displayWCSearch(event) {
+		event.preventDefault();
+		searchFormWrap.classList.add('ignition-wc-search-form-expanded');
+		searchFormWrap.querySelector('input').focus();
 	}
 
 	function isWCSearchVisible() {
-		return $searchFormWrap.hasClass('ignition-wc-search-form-expanded');
+		return searchFormWrap.classList.contains('ignition-wc-search-form-expanded');
 	}
 
-	$searchTrigger.on('click', displayWCSearch);
-	$searchDismiss.on('click', dismissWCSearch);
+	if (searchTrigger) {
+		searchTrigger.addEventListener('click', displayWCSearch);
+		searchDismiss.addEventListener('click', dismissWCSearch);
+	}
+
 
 	/* Event propagations */
-	$(document).on('keydown', function (e) {
-		e = e || window.e;
-		if (e.keyCode === 27 && isWCSearchVisible()) {
-			dismissWCSearch(e);
+	document.addEventListener('keydown', function (event) {
+		if (event.keyCode === 27 && isWCSearchVisible()) {
+			dismissWCSearch(event);
 		}
 	});
 
-	$body
-		.on('click', function (e) {
-			if (isWCSearchVisible()) {
-				dismissWCSearch();
-			}
-		})
-		.find('.ignition-wc-search-form, .ignition-wc-search-form-trigger')
-		.on('click', function (e) {
-			e.stopPropagation();
+	body.addEventListener('click', function (event) {
+		if (isWCSearchVisible()) {
+			dismissWCSearch(event);
+		}
+
+		const searchFormElements = document.querySelectorAll('.ignition-wc-search-form, .ignition-wc-search-form-trigger');
+
+		searchFormElements.forEach(function (elem) {
+			elem.addEventListener('click', function (event) {
+				event.stopPropagation();
+			});
 		});
+	});
 
 
 	/* -----------------------------------------
