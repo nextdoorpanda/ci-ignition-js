@@ -81,9 +81,9 @@
 			const response = await fetch(ignition_wc_search.ajax_url, {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json',
+					'Content-Type': 'application/x-www-form-urlencoded',
 				},
-				body: JSON.stringify({
+				body: new URLSearchParams({
 					action: 'ignition_wc_search_products',
 					product_cat: category,
 					s: string,
@@ -98,7 +98,7 @@
 		}
 	}
 
-	function queryProductsAndPopulateResults(category, string) {
+	async function queryProductsAndPopulateResults(category, string) {
 		if (string.trim().length < 3) {
 			dismissSearchResults();
 			return;
@@ -106,89 +106,98 @@
 
 		searchFormWrap.classList.add('is-loading');
 
-		return queryProducts(category, string)
-			.done(function (response) {
-				$searchFormWrap.removeClass('is-loading');
+		try{
+			const response = await queryProducts(category, string);
+			searchFormWrap.classList.remove('is-loading');
+			categoryResults.innerHTML = '';
 
-				if (response.error) {
-					var $errorMessage = $categoryResultsTemplate.clone();
-					var errorString = response.errors.join(', ');
+			if (response.error) {
+				const errorMessage = categoryResultsTemplate.cloneNode(true);
+				const errorString = response.errors.join(', ');
 
-					$errorMessage.find('.ignition-wc-search-results-item-thumb').remove();
-					$errorMessage.find('.ignition-wc-search-results-item-excerpt').remove();
-					$errorMessage.find('.ignition-wc-search-results-item-price').remove();
+				errorMessage.querySelector('.ignition-wc-search-results-item-thumb').remove();
+				errorMessage.querySelector('.ignition-wc-search-results-item-excerpt').remove();
+				errorMessage.querySelector('.ignition-wc-search-results-item-price').remove();
 
-					$errorMessage
-						.addClass('error')
-						.find('.ignition-wc-search-results-item-title')
-						.text(errorString);
-					$categoryResults.html($errorMessage).show();
+				errorMessage.classList.add('error');
+				errorMessage.querySelector('.ignition-wc-search-results-item-title').textContent = errorString;
+				categoryResults.append(errorMessage);
+				categoryResults.style.display = 'block';
 
-					return;
+				return;
+			}
+
+			const products = response.data;
+
+			if (!products) {
+				const notFoundMessage = categoryResultsTemplate.cloneNode(true);
+				notFoundMessage.querySelector('.ignition-wc-search-results-item-thumb').remove();
+				notFoundMessage.querySelector('.ignition-wc-search-results-item-excerpt').remove();
+				notFoundMessage.querySelector('.ignition-wc-search-results-item-price').remove();
+				notFoundMessage.querySelector('.ignition-wc-search-results-item-title').textContent = ignition_wc_search.search_no_products;
+				categoryResults.append(notFoundMessage)
+				categoryResults.style.display = 'block';
+
+				return;
+			}
+
+			const items = products.map(function (product) {
+				categoryResults.innerHTML = '';
+				const template = categoryResultsTemplate.cloneNode(true);
+				template.querySelector('a').setAttribute('href', product.url);
+
+				if (!product.image) {
+					template.querySelector('.ignition-wc-search-results-item-thumb').remove();
+				} else {
+					template.querySelector('.ignition-wc-search-results-item-thumb').innerHTML = product.image;
 				}
+				template.querySelector('.ignition-wc-search-results-item-title').textContent = product.title;
+				template.querySelector('.ignition-wc-search-results-item-excerpt').textContent = product.excerpt;
+				template.querySelector('.ignition-wc-search-results-item-price').innerHTML = product.price;
 
-				var products = response.data;
-
-				if (products.length === 0) {
-					var $notFoundMessage = $categoryResultsTemplate.clone();
-					$notFoundMessage.find('.ignition-wc-search-results-item-thumb').remove();
-					$notFoundMessage.find('.ignition-wc-search-results-item-excerpt').remove();
-					$notFoundMessage.find('.ignition-wc-search-results-item-price').remove();
-					$notFoundMessage
-						.find('.ignition-wc-search-results-item-title')
-						.text(ignition_wc_search.search_no_products);
-					$categoryResults.html($notFoundMessage).show();
-
-					return;
-				}
-
-				var $items = products.map(function (product) {
-					var $template = $categoryResultsTemplate.clone();
-					$template.find('a').attr('href', product.url);
-					if ( ! product.image ) {
-						$template.find('.ignition-wc-search-results-item-thumb').remove();
-					} else {
-						$template.find('.ignition-wc-search-results-item-thumb').html(product.image);
-					}
-					$template.find('.ignition-wc-search-results-item-title')
-						.text(product.title);
-					$template.find('.ignition-wc-search-results-item-excerpt')
-						.text(product.excerpt);
-					$template.find('.ignition-wc-search-results-item-price')
-						.html(product.price);
-
-					return $template;
-				});
-
-				$categoryResults.html($items);
-				$categoryResults.show();
+				return template;
 			});
+
+			items.forEach(function (item) {
+				categoryResults.append(item);
+			});
+
+			categoryResults.style.display = 'block';
+
+		} catch (error) {
+			console.log(error);
+		}
+
 	}
 
-	var debouncedQuery = debounce(queryProductsAndPopulateResults, 500);
+	const debouncedQuery = debounce(queryProductsAndPopulateResults, 500);
 
-	if ($searchForm.hasClass('form-ajax-enabled')) {
-		$searchInput.on('change keyup focus', function (event) {
-			// Do nothing on arrow up / down as we're using them for navigation
-			// Also ignore left/right.
-			var ignoreKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Escape'];
-			if ( ignoreKeys.indexOf( event.key ) >= 0 ) {
-				return;
-			}
+	if (searchForm.classList.contains('form-ajax-enabled')) {
+		const searchInputEvents = ['change', 'keyup', 'focus'];
+		[...searchInputEvents].forEach(function (event) {
+			searchInput.addEventListener(event, async function (event) {
+				// Do nothing on arrow up / down as we're using them for navigation
+				// Also ignore left/right.
+				const ignoreKeys = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Escape'];
 
-			var $this = $(this);
-			var string = $this.val();
+				if (ignoreKeys.includes(event.key)) {
+					return;
+				}
 
-			if (string.trim().length < 3) {
-				dismissSearchResults();
-				return;
-			}
+				const string = event.target.value;
 
-			debouncedQuery($categoriesSelect.val(), $this.val());
+				if (string.trim().length < 3) {
+					dismissSearchResults();
+					return;
+				}
+
+				debouncedQuery(categoriesSelect.value, string);
+
+			});
 		});
 
 		// Bind up / down arrow navigation on search results
-		$searchInput.on('keydown', function (event) {
+		searchInput.addEventListener('keydown', function (event) {
 			if (event.key === 'Escape') {
 				dismissSearchResults();
 			}
@@ -197,30 +206,34 @@
 				return;
 			}
 
-			var $items = $categoryResults.children();
-			var $highlighted = $categoryResults.find('.highlighted');
-			var currentIndex = $highlighted.index();
+			const items = [...categoryResults.children];
+			const highlighted = categoryResults.querySelector('.highlighted');
+			const currentIndex = items.indexOf(highlighted);
 
-			if ($items.length === 0 || !$items) {
+			if (!items) {
 				return;
 			}
 
 			if (event.key === 'ArrowDown') {
-				var $next = $items.eq(currentIndex + 1);
+				const next = items[currentIndex + 1];
 
-				if ($next.length) {
-					$items.removeClass('highlighted');
-					$next.addClass('highlighted');
+				if (next) {
+					items.forEach(function (item) {
+						item.classList.remove('highlighted');
+					});
+					next.classList.add('highlighted');
 				}
 				event.preventDefault();
 			}
 
 			if (event.key === 'ArrowUp') {
-				var $prev = $items.eq(currentIndex - 1);
+				const prev = items[currentIndex - 1];
 
-				if ($prev.length) {
-					$items.removeClass('highlighted');
-					$prev.addClass('highlighted');
+				if (prev) {
+					items.forEach(function (item) {
+						item.classList.remove('highlighted');
+					});
+					prev.classList.add('highlighted');
 				}
 				event.preventDefault();
 			}
@@ -228,12 +241,12 @@
 
 		// Bind form submit to go the highlighted item on submit
 		// instead of normal search
-		$searchForm.on('submit', function (event) {
-			var $highlighted = $categoryResults.find('.highlighted');
+		searchForm.addEventListener('submit', function (event) {
+			const highlighted = categoryResults.querySelector('.highlighted');
 
-			if ($highlighted.length > 0) {
+			if (highlighted) {
 				event.preventDefault();
-				window.location = $highlighted.find('a').attr('href');
+				window.location = highlighted.querySelector('a').getAttribute('href');
 			}
 		});
 	}
@@ -250,6 +263,7 @@
 				event.stopPropagation();
 			});
 		});
+	});
 
 
 	// Returns a function, that, as long as it continues to be invoked, will not
