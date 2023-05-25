@@ -88,8 +88,8 @@ jQuery( function ( $ ) {
 		element.classList.add('error');
 	}
 
-	function ignitionWCLoginPopupHideError( element ) {
-		element.removeClass( 'error' );
+	function ignitionWCLoginPopupHideError(element) {
+		element.classList.remove( 'error' );
 	}
 
 })();
