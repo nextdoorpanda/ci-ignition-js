@@ -11,78 +11,138 @@ jQuery( function ( $ ) {
 (function () {
 	'use strict';
 
-	$( '.ignition-wc-login-wrapper .woocommerce-form-login' ).on( 'submit', function ( e ) {
+	const wcLoginWrapper = document.querySelector('.ignition-wc-login-wrapper');
+	const wcLoginForm = wcLoginWrapper.querySelector('.woocommerce-form-login');
 
-		var $form      = $( this );
-		var $notices   = $form.siblings( '.ignition-wc-login-notices' );
-		var username   = $form.find( '#username' );
-		var password   = $form.find( '#password' );
-		var rememberme = $form.find( '#rememberme' );
-		var error;
+	wcLoginForm.addEventListener('submit', function (event) {
 
-		$notices.find( 'div' ).remove();
+		const form = event.target;
+		const notices = form.parentNode.querySelectorAll('.ignition-wc-login-notices');
+		const username = form.querySelector('#username');
+		const password   = form.querySelector('#password');
+		const rememberme = form.querySelector('#rememberme');
+		let error;
 
-		if ( username.val() === '' ) {
-			ignitionWCLoginPopupShowError( username );
+		notices.forEach(function (notice) {
+			notice.querySelector('div').remove();
+		});
+
+		if (username.value === '' ) {
+			ignitionWCLoginPopupShowError(username);
 			error = true;
 		} else {
-			ignitionWCLoginPopupHideError( username );
+			ignitionWCLoginPopupHideError(username);
 		}
 
-		if ( password.val() === '' ) {
-			ignitionWCLoginPopupShowError( password );
+		if (password.value === '' ) {
+			ignitionWCLoginPopupShowError(password);
 			error = true;
 		} else {
-			ignitionWCLoginPopupHideError( password );
+			ignitionWCLoginPopupHideError(password);
 		}
 
-		if ( error === true ) {
-			$notices.append( '<div class="msg failure">' + ignition_wc_popup.fields_required + '</div>' );
+		if (error) {
+			notices.forEach(function (notice) {
+				const msgDiv = document.createElement('div');
+				msgDiv.classList.add('msg', 'failure');
+				msgDiv.textContent = ignition_wc_popup.fields_required;
+				notice.appendChild(msgDiv);
+			});
 			return false;
 		}
 
-		$notices.append( '<div class="loading">' + ignition_wc_popup.loading_message + '</div>' );
-		$notices.find( '.msg' ).remove();
-		$.ajax( {
-			type: 'POST',
-			dataType: 'json',
-			url: ignition_wc_popup.ajax_url,
-			data: {
-				action: 'ignition_wc_popup_ajax_login',
-				username: username.val(),
-				password: password.val(),
-				rememberme: rememberme.is( ':checked' ),
-				nonce: $form.find( '#woocommerce-login-nonce' ).val(),
-			},
-			success: function ( response ) {
-				$notices.find( '.loading' ).remove();
-				if ( response.success === true ) {
-					$notices.append( '<div class="loading">' + response.data.message + '</div>' );
-					if ( response.data.redirect !== false ) {
-						window.location = response.data.redirect;
-					} else {
-						window.location.reload();
-					}
+		notices.forEach(function (notice) {
+			const msgDiv = document.createElement('div');
+			msgDiv.classList.add('loading');
+			msgDiv.textContent = ignition_wc_popup.loading_message;
+			notice.appendChild(msgDiv);
+		});
+
+		notices.forEach(function (notice) {
+			notice.querySelector('.msg').remove();
+		});
+
+		async function loginRequest() {
+			try {
+				const response = await fetch(ignition_wc_popup.ajax_url, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						action: 'ignition_wc_popup_ajax_login',
+						username: username.value,
+						password: password.value,
+						rememberme: rememberme.checked,
+						nonce: form.querySelector('#woocommerce-login-nonce').value,
+					})
+				});
+
+				const data = await response.json();
+				// return data;
+
+				if (data.success) {
+					await handleSuccess(data);
 				} else {
-					if ( response.data.invalid_username === true ) {
-						ignitionWCLoginPopupShowError( username );
-					} else {
-						ignitionWCLoginPopupHideError( username );
-					}
-					if ( response.data.incorrect_password === true ) {
-						ignitionWCLoginPopupShowError( password );
-					} else {
-						ignitionWCLoginPopupHideError( password );
-					}
-					$notices.append( '<div class="msg failure">' + response.data.message + '</div>' );
+					await handleReject(data);
 				}
-			},
-			error: function () {
-				$notices.append( '<div class="msg failure">' + ignition_wc_popup.ajax_error + '</div>' );
-			},
-		} );
-		e.preventDefault();
-	} );
+
+			} catch (error) {
+				await handleError(error);
+			}
+		}
+
+		loginRequest();
+
+		async function handleSuccess(response) {
+			notices.forEach(function (notice) {
+				notice.querySelector('.loading').remove();
+
+				const msgDiv = document.createElement('div');
+				msgDiv.classList.add('loading');
+				msgDiv.textContent = response.data.message;
+				notice.appendChild(msgDiv);
+			});
+
+			if ( response.data.redirect !== false ) {
+				window.location = response.data.redirect;
+			} else {
+				window.location.reload();
+			}
+		}
+
+		async function handleReject(response) {
+			if (response.data.invalid_username) {
+				ignitionWCLoginPopupShowError(username);
+			} else {
+				ignitionWCLoginPopupHideError(username);
+			}
+			if (response.data.incorrect_password) {
+				ignitionWCLoginPopupShowError(password);
+			} else {
+				ignitionWCLoginPopupHideError(password);
+			}
+
+			notices.forEach(function (notice) {
+				const msgDiv = document.createElement('div');
+				msgDiv.classList.add('msg', 'failure');
+				msgDiv.textContent = response.data.message;
+				notice.appendChild(msgDiv);
+			})
+
+		}
+
+		async function handleError(error) {
+			notices.forEach(function (notice) {
+				const msgDiv = document.createElement('div');
+				msgDiv.classList.add('msg', 'failure');
+				msgDiv.textContent = ignition_wc_popup.ajax_error;
+				notice.appendChild(msgDiv);
+			});
+		}
+
+		event.preventDefault();
+	});
 
 	function ignitionWCLoginPopupShowError(element) {
 		element.classList.add('error');
