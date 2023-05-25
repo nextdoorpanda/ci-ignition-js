@@ -1,11 +1,15 @@
 jQuery( function ( $ ) {
 	'use strict';
 
-	$( '.open-ignition-wc-login-popup' ).magnificPopup( {
+	$('.open-ignition-wc-login-popup').magnificPopup({
 		type: 'inline',
 		mainClass: 'ignition-wc-login-popup',
 		midClick: true
-	} );
+	});
+});
+
+(function () {
+	'use strict';
 
 	$( '.ignition-wc-login-wrapper .woocommerce-form-login' ).on( 'submit', function ( e ) {
 
@@ -88,4 +92,4 @@ jQuery( function ( $ ) {
 		element.removeClass( 'error' );
 	}
 
-} );
+})();
