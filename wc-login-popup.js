@@ -84,8 +84,8 @@ jQuery( function ( $ ) {
 		e.preventDefault();
 	} );
 
-	function ignitionWCLoginPopupShowError( element ) {
-		element.addClass( 'error' );
+	function ignitionWCLoginPopupShowError(element) {
+		element.classList.add('error');
 	}
 
 	function ignitionWCLoginPopupHideError( element ) {
