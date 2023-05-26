@@ -70,7 +70,6 @@
 	const searchInput = document.querySelector('.ignition-wc-search-input');
 	const categoryResults = document.querySelector('.ignition-wc-search-results');
 	const categoryResultsTemplate = document.querySelector('.ignition-wc-search-results-item');
-	const spinner = document.querySelector('.ignition-wc-search-spinner');
 
 	function dismissSearchResults() {
 		categoryResults.style.display = 'none';
