@@ -11,10 +11,8 @@ jQuery( function ( $ ) {
 (function () {
 	'use strict';
 
-	const wcLoginWrapper = document.querySelector('.ignition-wc-login-wrapper');
-	const wcLoginForm = wcLoginWrapper.querySelector('.woocommerce-form-login');
-
-	wcLoginForm.addEventListener('submit', function (event) {
+	document.querySelector('.ignition-wc-login-wrapper .woocommerce-form-login').addEventListener('submit', function (event) {
+		event.preventDefault();
 
 		const form = event.target;
 		const notices = form.parentNode.querySelectorAll('.ignition-wc-login-notices');
@@ -24,7 +22,7 @@ jQuery( function ( $ ) {
 		let error;
 
 		notices.forEach(function (notice) {
-			notice.querySelector('div').remove();
+			notice.innerHTML = '';
 		});
 
 		if (username.value === '' ) {
@@ -59,89 +57,73 @@ jQuery( function ( $ ) {
 		});
 
 		notices.forEach(function (notice) {
-			notice.querySelector('.msg').remove();
+			notice.querySelectorAll('.msg').forEach(function (msg) {
+				msg.remove();
+			});
 		});
 
-		async function loginRequest() {
-			try {
-				const response = await fetch(ignition_wc_popup.ajax_url, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						action: 'ignition_wc_popup_ajax_login',
-						username: username.value,
-						password: password.value,
-						rememberme: rememberme.checked,
-						nonce: form.querySelector('#woocommerce-login-nonce').value,
-					})
-				});
-
-				const data = await response.json();
-				// return data;
-
-				if (data.success) {
-					await handleSuccess(data);
-				} else {
-					await handleReject(data);
-				}
-
-			} catch (error) {
-				await handleError(error);
-			}
-		}
-
-		loginRequest();
-
-		async function handleSuccess(response) {
-			notices.forEach(function (notice) {
-				notice.querySelector('.loading').remove();
-
-				const msgDiv = document.createElement('div');
-				msgDiv.classList.add('loading');
-				msgDiv.textContent = response.data.message;
-				notice.appendChild(msgDiv);
-			});
-
-			if ( response.data.redirect !== false ) {
-				window.location = response.data.redirect;
-			} else {
-				window.location.reload();
-			}
-		}
-
-		async function handleReject(response) {
-			if (response.data.invalid_username) {
-				ignitionWCLoginPopupShowError(username);
-			} else {
-				ignitionWCLoginPopupHideError(username);
-			}
-			if (response.data.incorrect_password) {
-				ignitionWCLoginPopupShowError(password);
-			} else {
-				ignitionWCLoginPopupHideError(password);
-			}
-
-			notices.forEach(function (notice) {
-				const msgDiv = document.createElement('div');
-				msgDiv.classList.add('msg', 'failure');
-				msgDiv.textContent = response.data.message;
-				notice.appendChild(msgDiv);
+		fetch(ignition_wc_popup.ajax_url, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: new URLSearchParams({
+				action: 'ignition_wc_popup_ajax_login',
+				username: username.value,
+				password: password.value,
+				rememberme: rememberme.checked,
+				nonce: form.querySelector('#woocommerce-login-nonce').value
 			})
+		})
+			.then(function(response) {
+				if (response.ok) {
+					return response.json();
+				} else {
+					console.log(error);
+				}
+			})
+			.then(function(response) {
+				notices.forEach(function(notice) {
+					notice.querySelectorAll('.loading').forEach(function(loading) {
+						loading.remove();
+					});
+					if (response.success) {
+						const msgDiv = document.createElement('div');
+						msgDiv.classList.add('loading');
+						msgDiv.textContent = response.data.message;
+						notice.appendChild(msgDiv);
 
-		}
-
-		async function handleError(error) {
-			notices.forEach(function (notice) {
-				const msgDiv = document.createElement('div');
-				msgDiv.classList.add('msg', 'failure');
-				msgDiv.textContent = ignition_wc_popup.ajax_error;
-				notice.appendChild(msgDiv);
+						if (response.data.redirect !== false) {
+							window.location = response.data.redirect;
+						} else {
+							window.location.reload();
+						}
+					} else {
+						if (response.data.invalid_username) {
+							ignitionWCLoginPopupShowError(username);
+						} else {
+							ignitionWCLoginPopupHideError(username);
+						}
+						if (response.data.incorrect_password) {
+							ignitionWCLoginPopupShowError(password);
+						} else {
+							ignitionWCLoginPopupHideError(password);
+						}
+						const msgDiv = document.createElement('div');
+						msgDiv.classList.add('msg', 'failure');
+						msgDiv.textContent = response.data.message;
+						notice.appendChild(msgDiv);
+					}
+				});
+			})
+			.catch(function(error) {
+				notices.forEach(function(notice) {
+					const msgDiv = document.createElement('div');
+					msgDiv.classList.add('msg', 'failure');
+					msgDiv.textContent = ignition_wc_popup.ajax_error;
+					notice.appendChild(msgDiv);
+				});
 			});
-		}
-
-		event.preventDefault();
 	});
 
 	function ignitionWCLoginPopupShowError(element) {
@@ -149,7 +131,7 @@ jQuery( function ( $ ) {
 	}
 
 	function ignitionWCLoginPopupHideError(element) {
-		element.classList.remove( 'error' );
+		element.classList.remove('error');
 	}
 
 })();
